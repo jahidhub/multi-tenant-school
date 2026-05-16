@@ -1,5 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { Book, BookOpen, FolderGit2, GraduationCap, LayoutGrid, User } from 'lucide-react';
+import {
+    Book,
+    BookOpen,
+    FolderGit2,
+    GraduationCap,
+    LayoutGrid,
+    User,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -40,7 +47,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Enrollments',
         href: '/enrollments',
-        icon: Book,
+        icon: BookOpen,
     },
 ];
 
