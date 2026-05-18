@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import {
     Breadcrumb,
@@ -18,7 +18,18 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-export default function Dashboard() {
+export default function TeacherCreate() {
+    const { data, setData, post } = useForm({
+        f_name: '',
+        l_name: '',
+        subject: '',
+    });
+
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        post('/teacher/store');
+    }
+
     return (
         <>
             <Head title="Teacher" />
@@ -59,38 +70,72 @@ export default function Dashboard() {
 
                 <div className="teacher-table">
                     <Card>
-                        <CardHeader className='bold'>New Teacher</CardHeader>
+                        <CardHeader className="bold">New Teacher</CardHeader>
                         <CardContent>
-                            <FieldGroup>
-                                <Field>
-                                    <FieldLabel htmlFor="f_name">
-                                        First Name
-                                    </FieldLabel>
-                                    <Input id="f_name" type="text" />
-                                    <FieldDescription></FieldDescription>
-                                </Field>
+                            <form onSubmit={handleSubmit}>
+                                <FieldGroup>
+                                    <Field>
+                                        <FieldLabel htmlFor="f_name">
+                                            First Name
+                                        </FieldLabel>
+                                        <Input
+                                            id="f_name"
+                                            type="text"
+                                            value={data.f_name}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'f_name',
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <FieldDescription></FieldDescription>
+                                    </Field>
 
-                                <Field>
-                                    <FieldLabel htmlFor="l_name">
-                                        Last Name
-                                    </FieldLabel>
-                                    <Input id="l_name" type="text" />
-                                    <FieldDescription></FieldDescription>
-                                </Field>
-                                <Field>
-                                    <FieldLabel htmlFor="subject">
-                                        Subject
-                                    </FieldLabel>
-                                    <Input id="subject" type="text" />
-                                    <FieldDescription></FieldDescription>
-                                </Field>
-                                <Field orientation="horizontal">
-                                    <Button type="submit">Add Teacher</Button>
-                                    <Button type="reset" variant="outline">
-                                        Reset
-                                    </Button>
-                                </Field>
-                            </FieldGroup>
+                                    <Field>
+                                        <FieldLabel htmlFor="l_name">
+                                            Last Name
+                                        </FieldLabel>
+                                        <Input
+                                            id="l_name"
+                                            type="text"
+                                            value={data.l_name}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'l_name',
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <FieldDescription></FieldDescription>
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="subject">
+                                            Subject
+                                        </FieldLabel>
+                                        <Input
+                                            id="subject"
+                                            type="text"
+                                            value={data.subject}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'subject',
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <FieldDescription></FieldDescription>
+                                    </Field>
+                                    <Field orientation="horizontal">
+                                        <Button type="submit">
+                                            Add Teacher
+                                        </Button>
+                                        <Button type="reset" variant="outline">
+                                            Reset
+                                        </Button>
+                                    </Field>
+                                </FieldGroup>
+                            </form>
                         </CardContent>
                     </Card>
                 </div>
@@ -99,7 +144,7 @@ export default function Dashboard() {
     );
 }
 
-Dashboard.layout = {
+TeacherCreate.layout = {
     breadcrumbs: [
         {
             title: 'Teacher',

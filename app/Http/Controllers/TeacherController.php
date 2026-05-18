@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -28,7 +29,21 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            "f_name" => "required| max:50",
+            "l_name" => "required| max:50",
+            "subject" => "required| max:50",
+
+        ]);
+
+        
+
+        $teacher = new Teacher;
+        $teacher->tenant_id = 1;
+        $teacher->first_name = $request->f_name;
+        $teacher->last_name = $request->l_name;
+        $teacher->subject = $request->subject;
+        $teacher->save();
     }
 
     /**
