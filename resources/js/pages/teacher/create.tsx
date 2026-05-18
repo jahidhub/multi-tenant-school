@@ -11,15 +11,15 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import {
-    FieldGroup,
-    Field,
-    FieldLabel,
-} from '@/components/ui/field';
+import { FieldGroup, Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 export default function TeacherCreate() {
-    const { data, setData, post, errors, processing } = useForm({
+    const { data, setData, post, errors, processing } = useForm<{
+        f_name: string;
+        l_name: string;
+        subject: string;
+    }>({
         f_name: '',
         l_name: '',
         subject: '',
