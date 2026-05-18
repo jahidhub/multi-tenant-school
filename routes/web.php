@@ -11,6 +11,7 @@ Route::inertia('/', 'welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
+    Route::get('teacher/create', [TeacherController::class, 'create'])->name('teacher/create');
 });
 
 require __DIR__ . '/settings.php';
