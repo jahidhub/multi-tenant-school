@@ -1,5 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import InputError from '@/components/input-error';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -13,13 +14,12 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
     FieldGroup,
     Field,
-    FieldDescription,
     FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 export default function TeacherCreate() {
-    const { data, setData, post } = useForm({
+    const { data, setData, post, errors, processing } = useForm({
         f_name: '',
         l_name: '',
         subject: '',
@@ -89,7 +89,7 @@ export default function TeacherCreate() {
                                                 )
                                             }
                                         />
-                                        <FieldDescription></FieldDescription>
+                                        <InputError message={errors.f_name} />
                                     </Field>
 
                                     <Field>
@@ -107,7 +107,7 @@ export default function TeacherCreate() {
                                                 )
                                             }
                                         />
-                                        <FieldDescription></FieldDescription>
+                                        <InputError message={errors.l_name} />
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="subject">
@@ -124,13 +124,26 @@ export default function TeacherCreate() {
                                                 )
                                             }
                                         />
-                                        <FieldDescription></FieldDescription>
+                                        <InputError message={errors.subject} />
                                     </Field>
                                     <Field orientation="horizontal">
-                                        <Button type="submit">
+                                        <Button
+                                            type="submit"
+                                            disabled={processing}
+                                        >
+                                            {processing && (
+                                                <Loader2 className="animate-spin" />
+                                            )}
                                             Add Teacher
                                         </Button>
-                                        <Button type="reset" variant="outline">
+                                        <Button
+                                            type="reset"
+                                            variant="outline"
+                                            disabled={processing}
+                                            onClick={() =>
+                                                window.location.reload()
+                                            }
+                                        >
                                             Reset
                                         </Button>
                                     </Field>

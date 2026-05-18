@@ -33,10 +33,7 @@ class TeacherController extends Controller
             "f_name" => "required| max:50",
             "l_name" => "required| max:50",
             "subject" => "required| max:50",
-
         ]);
-
-        
 
         $teacher = new Teacher;
         $teacher->tenant_id = 1;
@@ -44,6 +41,8 @@ class TeacherController extends Controller
         $teacher->last_name = $request->l_name;
         $teacher->subject = $request->subject;
         $teacher->save();
+
+        return to_route('teacher.index')->with('message', "Teacher Created Successfully.");
     }
 
     /**
