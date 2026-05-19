@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TeacherController extends Controller
@@ -30,19 +31,22 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "f_name" => "required| max:50",
-            "l_name" => "required| max:50",
-            "subject" => "required| max:50",
+            "f_name" => "required|string|max:50",
+            "l_name" => "required|string|max:50",
+            "subject" => "required|string|max:50",
         ]);
 
-        $teacher = new Teacher;
-        $teacher->tenant_id = 1;
-        $teacher->first_name = $request->f_name;
-        $teacher->last_name = $request->l_name;
-        $teacher->subject = $request->subject;
-        $teacher->save();
-
-        return to_route('teacher.index')->with('message', "Teacher Created Successfully.");
+        $validated['tenant_id'] = Auth::user()->tenant_id;
+        Teacher::create([
+            'tenant_id' => $validated['tenant_id'],
+            'first_name' => $validated['f_name'],
+            'last_name' => $validated['l_name'],
+            'subject' => $validated['subject'],
+        ]);
+        return to_route('teacher.index')->with([
+            'type' => 'success',
+            'message' => 'Teacher added successfully',
+        ]);
     }
 
     /**
