@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -24,9 +24,28 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function Dashboard() {
+
+    const { flash } = usePage<{
+        flash: {
+            message?: string
+        }
+    }>().props;
+
+    useEffect(
+        () => {
+            if (flash.message) {
+                toast.success(flash.message, {
+                    duration: 3000
+                });
+            }
+        }, [flash.message]
+    );
+
+
     return (
         <>
             <Head title="Teacher" />

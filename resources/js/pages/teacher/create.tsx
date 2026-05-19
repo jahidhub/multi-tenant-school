@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import InputError from '@/components/input-error';
 import {
@@ -17,17 +17,15 @@ import { Input } from '@/components/ui/input';
 export default function TeacherCreate() {
 
 
-    const { flash } = usePage().props;
-
 
 
     const { data, setData, post, errors, processing } = useForm<{
-        f_name: string;
-        l_name: string;
+        first_name: string;
+        last_name: string;
         subject: string;
     }>({
-        f_name: '',
-        l_name: '',
+        first_name: '',
+        last_name: '',
         subject: '',
     });
 
@@ -81,39 +79,39 @@ export default function TeacherCreate() {
                             <form onSubmit={handleSubmit}>
                                 <FieldGroup>
                                     <Field>
-                                        <FieldLabel htmlFor="f_name">
+                                        <FieldLabel htmlFor="first_name">
                                             First Name
                                         </FieldLabel>
                                         <Input
-                                            id="f_name"
+                                            id="first_name"
                                             type="text"
-                                            value={data.f_name}
+                                            value={data.first_name}
                                             onChange={(e) =>
                                                 setData(
-                                                    'f_name',
+                                                    'first_name',
                                                     e.target.value,
                                                 )
                                             }
                                         />
-                                        <InputError message={errors.f_name} />
+                                        <InputError message={errors.first_name} />
                                     </Field>
 
                                     <Field>
-                                        <FieldLabel htmlFor="l_name">
+                                        <FieldLabel htmlFor="last_name">
                                             Last Name
                                         </FieldLabel>
                                         <Input
-                                            id="l_name"
+                                            id="last_name"
                                             type="text"
-                                            value={data.l_name}
+                                            value={data.last_name}
                                             onChange={(e) =>
                                                 setData(
-                                                    'l_name',
+                                                    'last_name',
                                                     e.target.value,
                                                 )
                                             }
                                         />
-                                        <InputError message={errors.l_name} />
+                                        <InputError message={errors.last_name} />
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="subject">

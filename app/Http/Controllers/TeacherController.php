@@ -31,23 +31,22 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "f_name" => "required|string|max:50",
-            "l_name" => "required|string|max:50",
+            "first_name" => "required|string|max:50",
+            "last_name" => "required|string|max:50",
             "subject" => "required|string|max:50",
         ]);
 
         $validated['tenant_id'] = Auth::user()->tenant_id;
         Teacher::create([
             'tenant_id' => $validated['tenant_id'],
-            'first_name' => $validated['f_name'],
-            'last_name' => $validated['l_name'],
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
             'subject' => $validated['subject'],
         ]);
         return to_route('teacher.index')->with([
             'type' => 'success',
             'message' => 'Teacher added successfully',
         ]);
-        
     }
 
     /**
