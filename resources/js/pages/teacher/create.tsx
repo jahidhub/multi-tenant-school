@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import InputError from '@/components/input-error';
 import {
@@ -15,6 +15,12 @@ import { FieldGroup, Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 export default function TeacherCreate() {
+
+
+    const { flash } = usePage().props;
+
+
+
     const { data, setData, post, errors, processing } = useForm<{
         f_name: string;
         l_name: string;

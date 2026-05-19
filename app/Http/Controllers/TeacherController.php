@@ -47,6 +47,7 @@ class TeacherController extends Controller
             'type' => 'success',
             'message' => 'Teacher added successfully',
         ]);
+        
     }
 
     /**
