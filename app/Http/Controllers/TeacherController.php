@@ -14,7 +14,9 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return Inertia::render('teacher/index');
+        return Inertia::render('teacher/index', [
+            
+        ]);
     }
 
     /**
@@ -37,6 +39,7 @@ class TeacherController extends Controller
         ]);
 
         $validated['tenant_id'] = Auth::user()->tenant_id;
+
         Teacher::create([
             'tenant_id' => $validated['tenant_id'],
             'first_name' => $validated['first_name'],
