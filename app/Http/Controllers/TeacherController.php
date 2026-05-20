@@ -14,8 +14,12 @@ class TeacherController extends Controller
      */
     public function index()
     {
+
+        $teachers = Teacher::where('tenant_id', Auth::user()->tenant_id)->get();
+
+
         return Inertia::render('teacher/index', [
-            
+            'teachers' => $teachers
         ]);
     }
 
@@ -55,17 +59,25 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+
+        $teacher = Teacher::where('tenant_id',  Auth::user()->tenant_id)->where('id', $id)->firstOrFail();
+
+        return Inertia::render('teacher/edit', [
+            'teacher' => $teacher->toArray(),
+            'id' => $id
+        ]);
+
+        return to_route('teacher.index')->with([
+            'type' => 'success',
+            'message' => 'Teacher updated successfully',
+        ]);
     }
 
     /**

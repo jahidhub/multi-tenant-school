@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { Ellipsis } from 'lucide-react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -25,12 +26,18 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
+type Teacher = {
+    id: number;
+    first_name: string;
+    last_name: string;
+    subject: string;
+};
 
-export default function Dashboard() {
+type Props = {
+    teachers: Teacher[];
+};
 
-
-
-
+export default function Teacher({ teachers }: Props) {
     return (
         <>
             <Head title="Teacher" />
@@ -76,39 +83,69 @@ export default function Dashboard() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    <TableRow>
-                                        <TableCell>1</TableCell>
-                                        <TableCell>Mahadi Hasan</TableCell>
-                                        <TableCell>English</TableCell>
-                                        <TableCell className="flex justify-center">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="outline">
-                                                        Actions
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent
-                                                    className="w-40"
-                                                    align="start"
+                                    {teachers && teachers.length > 0 ? (
+                                        teachers.map((teacher, index) => (
+                                            <TableRow key={teacher.id}>
+                                                <TableCell>
+                                                    {index + 1}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {teacher.first_name}{' '}
+                                                    {teacher.last_name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {teacher.subject}
+                                                </TableCell>
+                                                <TableCell className="flex justify-center">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger
+                                                            asChild
+                                                        >
+                                                            <Button variant="outline">
+                                                                <Ellipsis />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent
+                                                            className="w-40"
+                                                            align="end"
+                                                        >
+                                                            <DropdownMenuGroup>
+                                                                <DropdownMenuItem>
+                                                                    View
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    asChild
+                                                                >
+                                                                    <Link
+                                                                        href={`teacher/${teacher.id}/edit`}
+                                                                    >
+                                                                        Edit
+                                                                    </Link>
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem>
+                                                                    Update
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem>
+                                                                    Delete
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuGroup>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableRow>
+                                                <TableCell
+                                                    colSpan={4}
+                                                    className="text-center text-muted-foreground"
                                                 >
-                                                    <DropdownMenuGroup>
-                                                        <DropdownMenuItem>
-                                                            View
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem>
-                                                            Edit
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem>
-                                                            Update
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem>
-                                                            Delete
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuGroup>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
+                                                    No teachers found.
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableRow>
+                                    )}
                                 </TableBody>
                             </Table>
                         </CardContent>
@@ -119,7 +156,7 @@ export default function Dashboard() {
     );
 }
 
-Dashboard.layout = {
+Teacher.layout = {
     breadcrumbs: [
         {
             title: 'Teacher',
