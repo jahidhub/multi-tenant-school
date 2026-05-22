@@ -47,7 +47,7 @@ export default function Teacher({ teachers }: Props) {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink href="#">
+                                    <BreadcrumbLink href="/dashboard">
                                         Home
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
@@ -59,7 +59,7 @@ export default function Teacher({ teachers }: Props) {
                         </Breadcrumb>
                     </div>
                     <div>
-                        <Button>
+                        <Button asChild>
                             <Link className="" href="/teacher/create">
                                 Add Teacher
                             </Link>
@@ -117,16 +117,28 @@ export default function Teacher({ teachers }: Props) {
                                                                     asChild
                                                                 >
                                                                     <Link
-                                                                        href={`teacher/${teacher.id}/edit`}
+                                                                        href={`teacher/${teacher.id}`}
                                                                     >
                                                                         Edit
                                                                     </Link>
                                                                 </DropdownMenuItem>
-                                                                <DropdownMenuItem>
-                                                                    Update
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuItem>
-                                                                    Delete
+
+                                                                <DropdownMenuItem
+                                                                    asChild
+                                                                >
+                                                                    <Link
+                                                                        href={`teacher/${teacher.id}`}
+                                                                        method="delete"
+                                                                        as="button"
+                                                                        className="w-full text-left text-destructive focus:text-destructive focus:bg-destructive/10"
+                                                                        onClick={(e) => {
+                                                                            if (!confirm('Are you sure you want to delete this teacher?')) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Delete
+                                                                    </Link>
                                                                 </DropdownMenuItem>
                                                             </DropdownMenuGroup>
                                                         </DropdownMenuContent>
@@ -136,14 +148,12 @@ export default function Teacher({ teachers }: Props) {
                                         ))
                                     ) : (
                                         <TableRow>
-                                            <TableRow>
-                                                <TableCell
-                                                    colSpan={4}
-                                                    className="text-center text-muted-foreground"
-                                                >
-                                                    No teachers found.
-                                                </TableCell>
-                                            </TableRow>
+                                            <TableCell
+                                                colSpan={4}
+                                                className="text-center text-muted-foreground"
+                                            >
+                                                No teachers found.
+                                            </TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>

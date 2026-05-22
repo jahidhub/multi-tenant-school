@@ -14,10 +14,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-
-        $teachers = Teacher::where('tenant_id', Auth::user()->tenant_id)->get();
-
-
+        $teachers = Teacher::query()->where('tenant_id', Auth::user()->tenant_id)->get();
         return Inertia::render('teacher/index', [
             'teachers' => $teachers
         ]);
@@ -67,16 +64,11 @@ class TeacherController extends Controller
     public function edit(string $id)
     {
 
-        $teacher = Teacher::where('tenant_id',  Auth::user()->tenant_id)->where('id', $id)->firstOrFail();
+        $teacher = Teacher::query()->where('tenant_id',  Auth::user()->tenant_id)->where('id', $id)->firstOrFail();
 
         return Inertia::render('teacher/edit', [
             'teacher' => $teacher->toArray(),
             'id' => $id
-        ]);
-
-        return to_route('teacher.index')->with([
-            'type' => 'success',
-            'message' => 'Teacher updated successfully',
         ]);
     }
 
@@ -85,7 +77,21 @@ class TeacherController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            "first_name" => "required|string|max:50",
+            "last_name" => "required|string|max:50",
+            "subject" => "required|string|max:50",
+        ]);
+
+        Teacher::query()
+            ->where('tenant_id', Auth::user()->tenant_id)
+            ->where('id', $id)
+            ->update($validated);
+
+        return to_route('teacher.index')->with([
+            'type' => 'success',
+            'message' => 'Teacher updated successfully',
+        ]);
     }
 
     /**
@@ -93,6 +99,14 @@ class TeacherController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Teacher::query()
+            ->where('tenant_id', Auth::user()->tenant_id)
+            ->where('id', $id)
+            ->delete();
+
+        return to_route('teacher.index')->with([
+            'type' => 'success',
+            'message' => 'Teacher deleted successfully',
+        ]);
     }
 }

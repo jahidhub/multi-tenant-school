@@ -47,7 +47,10 @@ export default [
                 version: 'detect',
             },
         },
+
     },
+
+    
     {
         plugins: {
             import: importPlugin,

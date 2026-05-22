@@ -21,24 +21,24 @@ type Teacher = {
 };
 
 type Props = {
-    teacher: Teacher[];
-    id: [];
+    teacher: Teacher;
+    id: string | number;
 };
 
 export default function TeacherCreate({ teacher, id }: Props) {
-    const { data, setData, post, errors, processing } = useForm<{
+    const { data, setData, put, errors, processing } = useForm<{
         first_name: string;
         last_name: string;
         subject: string;
     }>({
-        first_name: teacher.first_name,
-        last_name: teacher.last_name,
-        subject: teacher.subject,
+        first_name: teacher.first_name || '',
+        last_name: teacher.last_name || '',
+        subject: teacher.subject || '',
     });
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        post(`/teacher/${id}`);
+        put(`/teacher/${id}`);
     }
 
     return (
@@ -50,13 +50,13 @@ export default function TeacherCreate({ teacher, id }: Props) {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>
+                                    <BreadcrumbLink asChild>
                                         <Link href="/dashboard">Home</Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>
+                                    <BreadcrumbLink asChild>
                                         <Link href="/teachers">Teacher</Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
@@ -68,7 +68,7 @@ export default function TeacherCreate({ teacher, id }: Props) {
                         </Breadcrumb>
                     </div>
                     <div>
-                        <Button variant="secondary">
+                        <Button variant="secondary" asChild>
                             <Link
                                 href="/teachers"
                                 className="flex items-center gap-2"
@@ -149,7 +149,7 @@ export default function TeacherCreate({ teacher, id }: Props) {
                                             {processing && (
                                                 <Loader2 className="animate-spin" />
                                             )}
-                                            Add Teacher
+                                            Save Changes
                                         </Button>
                                         <Button
                                             type="reset"

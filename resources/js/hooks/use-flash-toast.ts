@@ -10,7 +10,7 @@ export function useFlashToast(): void {
         if (flash?.type && flash?.message) {
             toast[flash.type](flash.message, {
                 id: flash.message,
-                duration: 3000,
+                duration: 1000,
             });
         }
     }, [flash]);

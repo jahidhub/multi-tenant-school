@@ -13,8 +13,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::GET('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
     Route::GET('teacher/create', [TeacherController::class, 'create'])->name('teacher.create');
     Route::post('teacher/store', [TeacherController::class, 'store'])->name('teacher.store');
-    Route::GET('teacher/{id}/edit', [TeacherController::class, 'edit'])->name('teacher.edit');
-    Route::POST('teacher/{id}', [TeacherController::class, 'update'])->name('teacher.update');
+    Route::GET('teacher/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
+    Route::PUT('teacher/{id}', [TeacherController::class, 'update'])->name('teacher.update');
+    Route::delete('teacher/{id}', [TeacherController::class, 'destroy'])->name('teacher.delete');
 });
 
 require __DIR__ . '/settings.php';

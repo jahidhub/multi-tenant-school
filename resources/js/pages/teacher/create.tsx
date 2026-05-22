@@ -15,10 +15,6 @@ import { FieldGroup, Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 export default function TeacherCreate() {
-
-
-
-
     const { data, setData, post, errors, processing } = useForm<{
         first_name: string;
         last_name: string;
@@ -43,13 +39,13 @@ export default function TeacherCreate() {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>
+                                    <BreadcrumbLink asChild>
                                         <Link href="/dashboard">Home</Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>
+                                    <BreadcrumbLink asChild>
                                         <Link href="/teachers">Teacher</Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
@@ -61,7 +57,7 @@ export default function TeacherCreate() {
                         </Breadcrumb>
                     </div>
                     <div>
-                        <Button variant="secondary">
+                        <Button variant="secondary" asChild>
                             <Link
                                 href="/teachers"
                                 className="flex items-center gap-2"
