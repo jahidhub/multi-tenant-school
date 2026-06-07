@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
-            $table->string('grade', 50);
+            $table->string('name', 50);
+            $table->string('email', 50);
+            $table->string('father_name', 50);
+            $table->string('mother_name', 50);
+            $table->string('phone_number', 50);
+            $table->string('address', 100);
+            $table->string('class', 50);
         });
     }
 

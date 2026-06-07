@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class StudentController extends Controller
 {
@@ -11,7 +12,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+       return Inertia::render('student/index');
     }
 
     /**

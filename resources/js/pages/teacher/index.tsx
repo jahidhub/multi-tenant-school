@@ -25,6 +25,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import Preview from './preview';
+
+
+
 
 type Teacher = {
     id: number;
@@ -77,7 +81,7 @@ export default function Teacher({ teachers }: Props) {
                                         <TableHead>No</TableHead>
                                         <TableHead>Full Name</TableHead>
                                         <TableHead>Subject</TableHead>
-                                        <TableHead className="flex justify-center">
+                                        <TableHead className="flex justify-end">
                                             Actions
                                         </TableHead>
                                     </TableRow>
@@ -96,7 +100,10 @@ export default function Teacher({ teachers }: Props) {
                                                 <TableCell>
                                                     {teacher.subject}
                                                 </TableCell>
-                                                <TableCell className="flex justify-center">
+                                                <TableCell className="flex justify-end gap-4">
+                                                    <Button variant="secondary" size='sm' className="w-25" > 
+                                                        <Preview teacher={teacher} />
+                                                    </Button>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger
                                                             asChild
@@ -110,14 +117,12 @@ export default function Teacher({ teachers }: Props) {
                                                             align="end"
                                                         >
                                                             <DropdownMenuGroup>
-                                                                <DropdownMenuItem>
-                                                                    View
-                                                                </DropdownMenuItem>
+                                                                
                                                                 <DropdownMenuItem
                                                                     asChild
                                                                 >
                                                                     <Link
-                                                                        href={`teacher/${teacher.id}`}
+                                                                        href={`edit/teacher/${teacher.id}`}
                                                                     >
                                                                         Edit
                                                                     </Link>
@@ -130,7 +135,7 @@ export default function Teacher({ teachers }: Props) {
                                                                         href={`teacher/${teacher.id}`}
                                                                         method="delete"
                                                                         as="button"
-                                                                        className="w-full text-left text-destructive focus:text-destructive focus:bg-destructive/10"
+                                                                        className="w-full"
                                                                         onClick={(e) => {
                                                                             if (!confirm('Are you sure you want to delete this teacher?')) {
                                                                                 e.preventDefault();
@@ -160,6 +165,8 @@ export default function Teacher({ teachers }: Props) {
                             </Table>
                         </CardContent>
                     </Card>
+
+
                 </div>
             </div>
         </>
