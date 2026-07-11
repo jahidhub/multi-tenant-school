@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { Ellipsis } from 'lucide-react';
+import { Ellipsis, Eye } from 'lucide-react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -32,8 +32,8 @@ import Preview from './preview';
 
 type Teacher = {
     id: number;
-    first_name: string;
-    last_name: string;
+    name: string;
+    phone: string;
     subject: string;
 };
 
@@ -79,10 +79,11 @@ export default function Teacher({ teachers }: Props) {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>No</TableHead>
-                                        <TableHead>Full Name</TableHead>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>Phone</TableHead>
                                         <TableHead>Subject</TableHead>
                                         <TableHead className="flex justify-end">
-                                            Actions
+                                            Actions 
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -94,16 +95,18 @@ export default function Teacher({ teachers }: Props) {
                                                     {index + 1}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {teacher.first_name}{' '}
-                                                    {teacher.last_name}
+                                                    {teacher.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {teacher.phone}
                                                 </TableCell>
                                                 <TableCell>
                                                     {teacher.subject}
                                                 </TableCell>
                                                 <TableCell className="flex justify-end gap-4">
-                                                    <Button variant="secondary" size='sm' className="w-25" > 
-                                                        <Preview teacher={teacher} />
-                                                    </Button>
+                                                    <span className='cursor-pointer' > 
+                                                         <Preview teacher={teacher}/>
+                                                    </span>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger
                                                             asChild

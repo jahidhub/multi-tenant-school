@@ -11,14 +11,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { BookOpen, User } from 'lucide-react'
+import { BookOpen, Eye, Phone, User } from 'lucide-react'
 import { Link } from '@inertiajs/react'
 
 
 type Teacher = {
     id: number;
-    first_name: string;
-    last_name: string;
+    name: string;
+    phone: string;
     subject: string;
 }
 
@@ -30,41 +30,63 @@ export default function preview({ teacher }: Props) {
 
     return (
         <Dialog>
-
             <DialogTrigger asChild>
-                <span className='w-100'>Preview</span>
+                <Button  size="icon" aria-label="Preview">
+                    <Eye className="h-4 w-4" />
+                </Button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-sm">
                 <DialogHeader>
-                    <DialogDescription className="text-xl">Teacher profile</DialogDescription>
+                    <DialogDescription className="text-xl">
+                        Teacher profile
+                    </DialogDescription>
                 </DialogHeader>
 
-                <div className="border-t border-border pt-4 flex flex-col gap-5">
+                <div className="flex flex-col gap-5 border-t border-border pt-4">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                            <User className="w-5 h-5 text-blue-600" />
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
+                            <User className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                            <p className="text-lg text-muted-foreground mb-0.5">Name</p>
-                            <p className="text-xl font-medium">{teacher.first_name}  {teacher.last_name}</p>
+                            <p className="mb-0.5 text-lg text-muted-foreground">
+                                Name
+                            </p>
+                            <p className="text-xl font-medium">
+                                {teacher.name}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
+                            <Phone className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                            <p className="mb-0.5 text-lg text-muted-foreground">
+                                Phone
+                            </p>
+                            <p className="text-xl font-medium">
+                                {teacher.phone}
+                            </p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                            <BookOpen className="w-5 h-5 text-green-600" />
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100">
+                            <BookOpen className="h-5 w-5 text-green-600" />
                         </div>
                         <div>
-                            <p className="text-lg text-muted-foreground mb-0.5">Subject</p>
-                            <p className="text-xl font-medium">{teacher.subject}</p>
+                            <p className="mb-0.5 text-lg text-muted-foreground">
+                                Subject
+                            </p>
+                            <p className="text-xl font-medium">
+                                {teacher.subject}
+                            </p>
                         </div>
                     </div>
-
                 </div>
 
                 <DialogFooter className="mt-2">
-                    
                     <Link
                         href={`/edit/teacher/${teacher.id}`}
                         className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground"
@@ -73,7 +95,6 @@ export default function preview({ teacher }: Props) {
                     </Link>
                 </DialogFooter>
             </DialogContent>
-
         </Dialog>
-    )
+    );
 }

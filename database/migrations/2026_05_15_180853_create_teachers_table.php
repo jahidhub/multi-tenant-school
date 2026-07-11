@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->string('name', 50);
+            $table->string('phone', 20);
             $table->string('subject', 50);
+            $table->timestamps();
         });
     }
 

@@ -16,12 +16,12 @@ import { Input } from '@/components/ui/input';
 
 export default function TeacherCreate() {
     const { data, setData, post, errors, processing } = useForm<{
-        first_name: string;
-        last_name: string;
+        name: string;
+        phone: string;
         subject: string;
     }>({
-        first_name: '',
-        last_name: '',
+        name: '',
+        phone: '',
         subject: '',
     });
 
@@ -75,39 +75,41 @@ export default function TeacherCreate() {
                             <form onSubmit={handleSubmit}>
                                 <FieldGroup>
                                     <Field>
-                                        <FieldLabel htmlFor="first_name">
-                                            First Name
+                                        <FieldLabel htmlFor="name">
+                                            Name
                                         </FieldLabel>
                                         <Input
-                                            id="first_name"
+                                            id="name"
                                             type="text"
-                                            value={data.first_name}
+                                            value={data.name}
                                             onChange={(e) =>
                                                 setData(
-                                                    'first_name',
+                                                    'name',
                                                     e.target.value,
                                                 )
                                             }
+                                            
                                         />
-                                        <InputError message={errors.first_name} />
+                                        <InputError message={errors.name} />
                                     </Field>
 
                                     <Field>
-                                        <FieldLabel htmlFor="last_name">
-                                            Last Name
+                                        <FieldLabel htmlFor="phone">
+                                            Phone
                                         </FieldLabel>
                                         <Input
-                                            id="last_name"
+                                            id="phone"
                                             type="text"
-                                            value={data.last_name}
+                                            value={data.phone}
                                             onChange={(e) =>
                                                 setData(
-                                                    'last_name',
+                                                    'phone',
                                                     e.target.value,
                                                 )
                                             }
+                                           
                                         />
-                                        <InputError message={errors.last_name} />
+                                        <InputError message={errors.phone} />
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="subject">
@@ -123,6 +125,7 @@ export default function TeacherCreate() {
                                                     e.target.value,
                                                 )
                                             }
+                                           
                                         />
                                         <InputError message={errors.subject} />
                                     </Field>

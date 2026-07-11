@@ -14,8 +14,8 @@ class Teacher extends Model
 
     protected $fillable = [
         'tenant_id',
-        'first_name',
-        'last_name',                  
+        'name',
+        'phone',                  
         'subject',                    
     ];
 
