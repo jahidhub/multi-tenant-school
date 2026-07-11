@@ -78,8 +78,8 @@ class TeacherController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            "first_name" => "required|string|max:50",
-            "last_name" => "required|string|max:50",
+            "name" => "required|string|max:50",
+            "phone" => "required|regex:/^\+?[0-9\s\(\)\-]+$/",
             "subject" => "required|string|max:50",
         ]);
 

@@ -15,8 +15,9 @@ import { FieldGroup, Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 type Teacher = {
-    first_name: string;
-    last_name: string;
+    id: string;
+    name: string;
+    phone: string;
     subject: string;
 };
 
@@ -27,12 +28,12 @@ type Props = {
 
 export default function TeacherCreate({ teacher, id }: Props) {
     const { data, setData, put, errors, processing } = useForm<{
-        first_name: string;
-        last_name: string;
+        name: string;
+        phone: string;
         subject: string;
     }>({
-        first_name: teacher.first_name || '',
-        last_name: teacher.last_name || '',
+        name: teacher.name || '',
+        phone: teacher.phone || '',
         subject: teacher.subject || '',
     });
 
@@ -86,43 +87,33 @@ export default function TeacherCreate({ teacher, id }: Props) {
                             <form onSubmit={handleSubmit}>
                                 <FieldGroup>
                                     <Field>
-                                        <FieldLabel htmlFor="first_name">
-                                            First Name
+                                        <FieldLabel htmlFor="name">
+                                            Name
                                         </FieldLabel>
                                         <Input
-                                            id="first_name"
+                                            id="name"
                                             type="text"
-                                            value={data.first_name}
+                                            value={data.name}
                                             onChange={(e) =>
-                                                setData(
-                                                    'first_name',
-                                                    e.target.value,
-                                                )
+                                                setData('name', e.target.value)
                                             }
                                         />
-                                        <InputError
-                                            message={errors.first_name}
-                                        />
+                                        <InputError message={errors.name} />
                                     </Field>
 
                                     <Field>
-                                        <FieldLabel htmlFor="last_name">
-                                            Last Name
+                                        <FieldLabel htmlFor="phone">
+                                            Phone
                                         </FieldLabel>
                                         <Input
-                                            id="last_name"
+                                            id="phone"
                                             type="text"
-                                            value={data.last_name}
+                                            value={data.phone}
                                             onChange={(e) =>
-                                                setData(
-                                                    'last_name',
-                                                    e.target.value,
-                                                )
+                                                setData('phone', e.target.value)
                                             }
                                         />
-                                        <InputError
-                                            message={errors.last_name}
-                                        />
+                                        <InputError message={errors.phone} />
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="subject">
