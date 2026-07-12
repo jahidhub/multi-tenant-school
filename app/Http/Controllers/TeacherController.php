@@ -14,7 +14,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::query()->where('tenant_id', Auth::user()->tenant_id)->get();
+        $teachers = Teacher::query()->where('tenant_id', Auth::user()->tenant_id)->paginate(5);
         return Inertia::render('teacher/index', [
             'teachers' => $teachers
         ]);

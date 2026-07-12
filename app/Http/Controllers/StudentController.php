@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class StudentController extends Controller
@@ -12,16 +14,20 @@ class StudentController extends Controller
      */
     public function index()
     {
-       return Inertia::render('student/index');
+        $tenant_id = Auth::user()->tenant_id;
+        $students = Student::query()->where('tenant_id', $tenant_id)->paginate(5);
+        return Inertia::render(
+            'student/index',
+            [
+                'students' => $students
+            ]
+        );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
