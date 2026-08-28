@@ -13,20 +13,19 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->string('name', 50);
-            $table->string('email', 50);
-            $table->date('date_of_birth');
-            $table->string('gender', 10);
+            $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();   
+            $table->string('name', 50);             
             $table->string('class', 20);
-            $table->string('section', 10);
-            $table->string('roll_number', 20);
-            $table->string('father_name', 50);
-            $table->string('mother_name', 50);
-            $table->string('phone_number', 50);
-            $table->string('address', 100);
+            $table->string('roll_number', 20)->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('gender', 10)->nullable();
+            $table->string('father_name', 50)->nullable();
+            $table->string('guardian_phone', 20)->nullable(); 
+            $table->string('address', 100)->nullable(); 
             $table->timestamps();
         });
+
+
     }
 
     /**

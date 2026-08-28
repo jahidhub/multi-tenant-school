@@ -26,6 +26,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import Preview from './preview';
+import { Pagination } from '@/components/pagination';
 
 
 
@@ -39,10 +40,14 @@ type Teacher = {
 };
 
 type Props = {
-    teachers: Teacher[];
+    teachers: {
+        data: Teacher[];
+        links: any[];
+    };
 };
 
 export default function Teacher({ teachers }: Props) {
+    console.log(teachers.data);
     return (
         <>
             <Head title="Teacher" />
@@ -85,13 +90,13 @@ export default function Teacher({ teachers }: Props) {
                                         <TableHead>Subject</TableHead>
                                         <TableHead>Address</TableHead>
                                         <TableHead className="flex justify-end">
-                                            Actions 
+                                            Actions
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {teachers && teachers.length > 0 ? (
-                                        teachers.map((teacher, index) => (
+                                    {teachers?.data && teachers.data.length > 0 ? (
+                                        teachers.data.map((teacher, index) => (
                                             <TableRow key={teacher.id}>
                                                 <TableCell>
                                                     {index + 1}
@@ -109,8 +114,8 @@ export default function Teacher({ teachers }: Props) {
                                                     {teacher.address}
                                                 </TableCell>
                                                 <TableCell className="flex justify-end gap-4">
-                                                    <span className='cursor-pointer' > 
-                                                         <Preview teacher={teacher}/>
+                                                    <span className='cursor-pointer' >
+                                                        <Preview teacher={teacher} />
                                                     </span>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger
@@ -125,7 +130,7 @@ export default function Teacher({ teachers }: Props) {
                                                             align="end"
                                                         >
                                                             <DropdownMenuGroup>
-                                                                
+
                                                                 <DropdownMenuItem
                                                                     asChild
                                                                 >
@@ -171,6 +176,7 @@ export default function Teacher({ teachers }: Props) {
                                     )}
                                 </TableBody>
                             </Table>
+                            <Pagination links={teachers.links} />
                         </CardContent>
                     </Card>
 

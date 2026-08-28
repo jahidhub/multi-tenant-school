@@ -11,10 +11,14 @@ class StudentController extends Controller
 {
     public function index()
     {
-        $students = Student::query()->where('tenant_id', Auth::user()->tenant_id)->get();
-        return Inertia::render('student/index', [
-            'students' => $students
-        ]);
+        $tenant_id = Auth::user()->tenant_id;
+        $students = Student::query()->where('tenant_id', $tenant_id)->paginate(5);
+        return Inertia::render(
+            'student/index',
+            [
+                'students' => $students
+            ]
+        );
     }
 
     public function create()
@@ -26,16 +30,13 @@ class StudentController extends Controller
     {
         $validated = $request->validate([
             "name" => "required|string|max:50",
-            "email" => "required|email|max:50",
-            "date_of_birth" => "required|date",
-            "gender" => "required|string|max:10",
             "class" => "required|string|max:20",
-            "section" => "required|string|max:10",
-            "roll_number" => "required|string|max:20",
-            "father_name" => "required|string|max:50",
-            "mother_name" => "required|string|max:50",
-            "phone_number" => "required|string|max:50",
-            "address" => "required|string|max:100",
+            "roll_number" => "nullable|string|max:20",
+            "date_of_birth" => "nullable|date",
+            "gender" => "nullable|string|max:10",
+            "father_name" => "nullable|string|max:50",
+            "guardian_phone" => "nullable|string|max:20",
+            "address" => "nullable|string|max:100",
         ]);
 
         $validated['tenant_id'] = Auth::user()->tenant_id;
@@ -62,16 +63,13 @@ class StudentController extends Controller
     {
         $validated = $request->validate([
             "name" => "required|string|max:50",
-            "email" => "required|email|max:50",
-            "date_of_birth" => "required|date",
-            "gender" => "required|string|max:10",
             "class" => "required|string|max:20",
-            "section" => "required|string|max:10",
-            "roll_number" => "required|string|max:20",
-            "father_name" => "required|string|max:50",
-            "mother_name" => "required|string|max:50",
-            "phone_number" => "required|string|max:50",
-            "address" => "required|string|max:100",
+            "roll_number" => "nullable|string|max:20",
+            "date_of_birth" => "nullable|date",
+            "gender" => "nullable|string|max:10",
+            "father_name" => "nullable|string|max:50",
+            "guardian_phone" => "nullable|string|max:20",
+            "address" => "nullable|string|max:100",
         ]);
 
         Student::query()

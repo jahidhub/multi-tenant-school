@@ -28,11 +28,13 @@ import {
 } from '@/components/ui/table';
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -43,23 +45,24 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Field, FieldGroup } from "@/components/ui/field";
 
 interface StudentData {
     id: number;
     name: string;
-    email: string;
-    date_of_birth: string;
-    gender: string;
     class: string;
-    section: string;
-    roll_number: string;
-    father_name: string;
-    mother_name: string;
-    phone_number: string;
-    address: string;
+    roll_number: string | null;
+    date_of_birth: string | null;
+    gender: string | null;
+    father_name: string | null;
+    guardian_phone: string | null;
+    address: string | null;
 }
 
-export default function Student({ students = [] }: { students?: StudentData[] }) {
+export default function Student({ students = [] }: { students?: any }) {
+    // Pagination data comes in as a paginator object from Laravel
+    const studentsList = students?.data || [];
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -67,15 +70,12 @@ export default function Student({ students = [] }: { students?: StudentData[] })
 
     const { data, setData, post, put, delete: destroy, processing, errors, reset, clearErrors } = useForm({
         name: '',
-        email: '',
+        class: '',
+        roll_number: '',
         date_of_birth: '',
         gender: '',
-        class: '',
-        section: '',
-        roll_number: '',
         father_name: '',
-        mother_name: '',
-        phone_number: '',
+        guardian_phone: '',
         address: '',
     });
 
@@ -92,15 +92,12 @@ export default function Student({ students = [] }: { students?: StudentData[] })
         setSelectedStudent(student);
         setData({
             name: student.name || '',
-            email: student.email || '',
+            class: student.class || '',
+            roll_number: student.roll_number || '',
             date_of_birth: student.date_of_birth || '',
             gender: student.gender || '',
-            class: student.class || '',
-            section: student.section || '',
-            roll_number: student.roll_number || '',
             father_name: student.father_name || '',
-            mother_name: student.mother_name || '',
-            phone_number: student.phone_number || '',
+            guardian_phone: student.guardian_phone || '',
             address: student.address || '',
         });
         clearErrors();
@@ -181,16 +178,16 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                         <TableHead>Class</TableHead>
                                         <TableHead>Roll</TableHead>
                                         <TableHead>Gender</TableHead>
-                                        <TableHead>Email</TableHead>
-                                        <TableHead>Phone</TableHead>
+                                        <TableHead>Father Name</TableHead>
+                                        <TableHead>Guardian Phone</TableHead>
                                         <TableHead className="flex justify-end">
                                             Actions
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {students && students.length > 0 ? (
-                                        students.map((student, index) => (
+                                    {studentsList && studentsList.length > 0 ? (
+                                        studentsList.map((student: StudentData, index: number) => (
                                             <TableRow key={student.id}>
                                                 <TableCell>
                                                     {(index + 1).toString().padStart(2, '0')}
@@ -199,7 +196,7 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                                     {student.name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {student.class} ({student.section})
+                                                    {student.class}
                                                 </TableCell>
                                                 <TableCell>
                                                     {student.roll_number}
@@ -208,10 +205,10 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                                     {student.gender}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {student.email}
+                                                    {student.father_name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {student.phone_number}
+                                                    {student.guardian_phone}
                                                 </TableCell>
                                                 <TableCell className="flex justify-end gap-4">
                                                     <DropdownMenu>
@@ -237,7 +234,7 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                     ) : (
                                         <TableRow>
                                             <TableCell
-                                                colSpan={8}
+                                                colSpan={7}
                                                 className="text-center text-muted-foreground py-8"
                                             >
                                                 No students found.
@@ -271,16 +268,6 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                 />
                                 {errors.name && <span className="text-sm text-red-500">{errors.name}</span>}
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    value={data.email}
-                                    onChange={(e) => setData('email', e.target.value)}
-                                />
-                                {errors.email && <span className="text-sm text-red-500">{errors.email}</span>}
-                            </div>
                             
                             <div className="grid gap-2">
                                 <Label htmlFor="date_of_birth">Date of Birth</Label>
@@ -292,6 +279,7 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                 />
                                 {errors.date_of_birth && <span className="text-sm text-red-500">{errors.date_of_birth}</span>}
                             </div>
+
                             <div className="grid gap-2">
                                 <Label htmlFor="gender">Gender</Label>
                                 <Select value={data.gender} onValueChange={(val) => setData('gender', val)}>
@@ -316,15 +304,6 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                 />
                                 {errors.class && <span className="text-sm text-red-500">{errors.class}</span>}
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="section">Section</Label>
-                                <Input
-                                    id="section"
-                                    value={data.section}
-                                    onChange={(e) => setData('section', e.target.value)}
-                                />
-                                {errors.section && <span className="text-sm text-red-500">{errors.section}</span>}
-                            </div>
                             
                             <div className="grid gap-2">
                                 <Label htmlFor="roll_number">Roll Number</Label>
@@ -334,15 +313,6 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                     onChange={(e) => setData('roll_number', e.target.value)}
                                 />
                                 {errors.roll_number && <span className="text-sm text-red-500">{errors.roll_number}</span>}
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="phone_number">Phone Number</Label>
-                                <Input
-                                    id="phone_number"
-                                    value={data.phone_number}
-                                    onChange={(e) => setData('phone_number', e.target.value)}
-                                />
-                                {errors.phone_number && <span className="text-sm text-red-500">{errors.phone_number}</span>}
                             </div>
 
                             <div className="grid gap-2">
@@ -354,14 +324,15 @@ export default function Student({ students = [] }: { students?: StudentData[] })
                                 />
                                 {errors.father_name && <span className="text-sm text-red-500">{errors.father_name}</span>}
                             </div>
+
                             <div className="grid gap-2">
-                                <Label htmlFor="mother_name">Mother Name</Label>
+                                <Label htmlFor="guardian_phone">Guardian Phone</Label>
                                 <Input
-                                    id="mother_name"
-                                    value={data.mother_name}
-                                    onChange={(e) => setData('mother_name', e.target.value)}
+                                    id="guardian_phone"
+                                    value={data.guardian_phone}
+                                    onChange={(e) => setData('guardian_phone', e.target.value)}
                                 />
-                                {errors.mother_name && <span className="text-sm text-red-500">{errors.mother_name}</span>}
+                                {errors.guardian_phone && <span className="text-sm text-red-500">{errors.guardian_phone}</span>}
                             </div>
                             
                             <div className="grid gap-2 col-span-2">
