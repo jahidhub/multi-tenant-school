@@ -1,10 +1,16 @@
 import { Link } from '@inertiajs/react';
 import {
+    Award,
     Book,
     BookOpen,
+    Clipboard,
+    ClipboardList,
+    Coins,
+    FileText,
     FolderGit2,
     GraduationCap,
     LayoutGrid,
+    Receipt,
     User,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -48,6 +54,36 @@ const mainNavItems: NavItem[] = [
         title: 'Enrollments',
         href: '/enrollments',
         icon: BookOpen,
+    },
+    {
+        title: 'Exams',
+        href: '/exams',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Grades',
+        href: '/grades',
+        icon: Clipboard,
+    },
+    {
+        title: 'Grading Scales',
+        href: '/grading-scales',
+        icon: Award,
+    },
+    {
+        title: 'Report Cards',
+        href: '/report-cards',
+        icon: FileText,
+    },
+    {
+        title: 'Fee Structures',
+        href: '/fee-structures',
+        icon: Coins,
+    },
+    {
+        title: 'Invoices',
+        href: '/invoices',
+        icon: Receipt,
     },
 ];
 

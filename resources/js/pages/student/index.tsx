@@ -223,6 +223,11 @@ export default function Student({ students = [] }: { students?: any }) {
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent className="w-40" align="end">
                                                             <DropdownMenuGroup>
+                                                                <DropdownMenuItem asChild>
+                                                                    <Link href={`/students/${student.id}`}>
+                                                                        View Profile
+                                                                    </Link>
+                                                                </DropdownMenuItem>
                                                                 <DropdownMenuItem onClick={() => openEditModal(student)}>
                                                                     Edit
                                                                 </DropdownMenuItem>

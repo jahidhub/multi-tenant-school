@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\Invoice;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -51,7 +53,47 @@ class StudentController extends Controller
 
     public function show(string $id)
     {
-        //
+        $tenant_id = Auth::user()->tenant_id;
+
+        $student = Student::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $enrollments = \App\Models\Enrollment::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('student_id', $id)
+            ->with('course')
+            ->get();
+
+        $grades = \App\Models\Grade::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('student_id', $id)
+            ->with(['exam.course'])
+            ->get();
+
+        $invoices = Invoice::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('student_id', $id)
+            ->with(['feeStructure'])
+            ->get();
+
+        $payments = Payment::query()
+            ->where('tenant_id', $tenant_id)
+            ->whereHas('invoice', function ($q) use ($id) {
+                $q->where('student_id', $id);
+            })
+            ->with(['invoice.feeStructure'])
+            ->latest()
+            ->get();
+
+        return Inertia::render('student/show', [
+            'student' => $student,
+            'enrollments' => $enrollments,
+            'grades' => $grades,
+            'invoices' => $invoices,
+            'payments' => $payments,
+        ]);
     }
 
     public function edit(string $id)
