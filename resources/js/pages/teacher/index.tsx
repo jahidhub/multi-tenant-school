@@ -35,6 +35,7 @@ type Teacher = {
     name: string;
     phone: string;
     subject: string;
+    address: string;
 };
 
 type Props = {
@@ -82,6 +83,7 @@ export default function Teacher({ teachers }: Props) {
                                         <TableHead>Name</TableHead>
                                         <TableHead>Phone</TableHead>
                                         <TableHead>Subject</TableHead>
+                                        <TableHead>Address</TableHead>
                                         <TableHead className="flex justify-end">
                                             Actions 
                                         </TableHead>
@@ -102,6 +104,9 @@ export default function Teacher({ teachers }: Props) {
                                                 </TableCell>
                                                 <TableCell>
                                                     {teacher.subject}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {teacher.address}
                                                 </TableCell>
                                                 <TableCell className="flex justify-end gap-4">
                                                     <span className='cursor-pointer' > 

@@ -9,9 +9,6 @@ use Inertia\Inertia;
 
 class TeacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $teachers = Teacher::query()->where('tenant_id', Auth::user()->tenant_id)->get();
@@ -20,23 +17,18 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return inertia::render('teacher/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             "name" => "required|string|max:50",
             "phone" => "required|regex:/^\+?[0-9\s\(\)\-]+$/",
             "subject" => "required|string|max:50",
+            "address" => "required|string|max:100",
         ]);
 
         $validated['tenant_id'] = Auth::user()->tenant_id;
@@ -46,6 +38,7 @@ class TeacherController extends Controller
             'name' => $validated['name'],
             'phone' => $validated['phone'],
             'subject' => $validated['subject'],
+            'address' => $validated['address'],
         ]);
         return to_route('teacher.index')->with([
             'type' => 'success',
@@ -53,17 +46,10 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id) {}
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-
         $teacher = Teacher::query()->where('tenant_id',  Auth::user()->tenant_id)->where('id', $id)->firstOrFail();
 
         return Inertia::render('teacher/edit', [
@@ -72,15 +58,13 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            "first_name" => "required|string|max:50",
-            "last_name" => "required|string|max:50",
+            "name" => "required|string|max:50",
+            "phone" => "required|regex:/^\+?[0-9\s\(\)\-]+$/",
             "subject" => "required|string|max:50",
+            "address" => "required|string|max:100",
         ]);
 
         Teacher::query()
@@ -94,9 +78,6 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         Teacher::query()

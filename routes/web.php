@@ -21,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::get('/students', [StudentController::class, 'index'])->name('student.index');
+    Route::post('/student/store', [StudentController::class, 'store'])->name('student.store');
+    Route::put('/student/{id}', [StudentController::class, 'update'])->name('student.update');
+    Route::delete('/student/{id}', [StudentController::class, 'destroy'])->name('student.destroy');
 });
 
 require __DIR__ . '/settings.php';

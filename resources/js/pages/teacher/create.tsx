@@ -19,10 +19,12 @@ export default function TeacherCreate() {
         name: string;
         phone: string;
         subject: string;
+        address: string;
     }>({
         name: '',
         phone: '',
         subject: '',
+        address: '',
     });
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -128,6 +130,23 @@ export default function TeacherCreate() {
                                            
                                         />
                                         <InputError message={errors.subject} />
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="address">
+                                            Address
+                                        </FieldLabel>
+                                        <Input
+                                            id="address"
+                                            type="text"
+                                            value={data.address}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'address',
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <InputError message={errors.address} />
                                     </Field>
                                     <Field orientation="horizontal">
                                         <Button

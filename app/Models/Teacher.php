@@ -10,8 +10,6 @@ class Teacher extends Model
 
     use HasFactory;
 
-    public $timestamps = false;        
-
     protected $fillable = [
         'tenant_id',
         'name',

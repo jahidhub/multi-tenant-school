@@ -15,9 +15,10 @@ import { FieldGroup, Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 type Teacher = {
-    first_name: string;
-    last_name: string;
+    name: string;
+    phone: string;
     subject: string;
+    address: string;
 };
 
 type Props = {
@@ -25,15 +26,17 @@ type Props = {
     id: string | number;
 };
 
-export default function TeacherCreate({ teacher, id }: Props) {
+export default function TeacherEdit({ teacher, id }: Props) {
     const { data, setData, put, errors, processing } = useForm<{
-        first_name: string;
-        last_name: string;
+        name: string;
+        phone: string;
         subject: string;
+        address: string;
     }>({
-        first_name: teacher.first_name || '',
-        last_name: teacher.last_name || '',
+        name: teacher.name || '',
+        phone: teacher.phone || '',
         subject: teacher.subject || '',
+        address: teacher.address || '',
     });
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -86,44 +89,45 @@ export default function TeacherCreate({ teacher, id }: Props) {
                             <form onSubmit={handleSubmit}>
                                 <FieldGroup>
                                     <Field>
-                                        <FieldLabel htmlFor="first_name">
-                                            First Name
+                                        <FieldLabel htmlFor="name">
+                                            Name
                                         </FieldLabel>
                                         <Input
-                                            id="first_name"
+                                            id="name"
                                             type="text"
-                                            value={data.first_name}
+                                            value={data.name}
                                             onChange={(e) =>
                                                 setData(
-                                                    'first_name',
+                                                    'name',
                                                     e.target.value,
                                                 )
                                             }
                                         />
                                         <InputError
-                                            message={errors.first_name}
+                                            message={errors.name}
                                         />
                                     </Field>
 
                                     <Field>
-                                        <FieldLabel htmlFor="last_name">
-                                            Last Name
+                                        <FieldLabel htmlFor="phone">
+                                            Phone
                                         </FieldLabel>
                                         <Input
-                                            id="last_name"
+                                            id="phone"
                                             type="text"
-                                            value={data.last_name}
+                                            value={data.phone}
                                             onChange={(e) =>
                                                 setData(
-                                                    'last_name',
+                                                    'phone',
                                                     e.target.value,
                                                 )
                                             }
                                         />
                                         <InputError
-                                            message={errors.last_name}
+                                            message={errors.phone}
                                         />
                                     </Field>
+                                    
                                     <Field>
                                         <FieldLabel htmlFor="subject">
                                             Subject
@@ -141,6 +145,25 @@ export default function TeacherCreate({ teacher, id }: Props) {
                                         />
                                         <InputError message={errors.subject} />
                                     </Field>
+                                    
+                                    <Field>
+                                        <FieldLabel htmlFor="address">
+                                            Address
+                                        </FieldLabel>
+                                        <Input
+                                            id="address"
+                                            type="text"
+                                            value={data.address}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'address',
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <InputError message={errors.address} />
+                                    </Field>
+                                    
                                     <Field orientation="horizontal">
                                         <Button
                                             type="submit"
@@ -172,7 +195,7 @@ export default function TeacherCreate({ teacher, id }: Props) {
     );
 }
 
-TeacherCreate.layout = {
+TeacherEdit.layout = {
     breadcrumbs: [
         {
             title: 'Teacher',

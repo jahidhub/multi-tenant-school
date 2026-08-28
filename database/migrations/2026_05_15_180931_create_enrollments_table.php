@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->date('enrollment_date')->default(DB::raw('(CURDATE())'));
+            $table->timestamps();
         });
     }
 

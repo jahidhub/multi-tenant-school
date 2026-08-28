@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { Ellipsis } from 'lucide-react';
+import { useState } from 'react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -25,10 +26,122 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
+interface StudentData {
+    id: number;
+    name: string;
+    email: string;
+    date_of_birth: string;
+    gender: string;
+    class: string;
+    section: string;
+    roll_number: string;
+    father_name: string;
+    mother_name: string;
+    phone_number: string;
+    address: string;
+}
 
+export default function Student({ students = [] }: { students?: StudentData[] }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+    const [selectedStudent, setSelectedStudent] = useState<StudentData | null>(null);
 
-export default function Student(){
+    const { data, setData, post, put, delete: destroy, processing, errors, reset, clearErrors } = useForm({
+        name: '',
+        email: '',
+        date_of_birth: '',
+        gender: '',
+        class: '',
+        section: '',
+        roll_number: '',
+        father_name: '',
+        mother_name: '',
+        phone_number: '',
+        address: '',
+    });
+
+    const openCreateModal = () => {
+        setModalMode('create');
+        setSelectedStudent(null);
+        reset();
+        clearErrors();
+        setIsModalOpen(true);
+    };
+
+    const openEditModal = (student: StudentData) => {
+        setModalMode('edit');
+        setSelectedStudent(student);
+        setData({
+            name: student.name || '',
+            email: student.email || '',
+            date_of_birth: student.date_of_birth || '',
+            gender: student.gender || '',
+            class: student.class || '',
+            section: student.section || '',
+            roll_number: student.roll_number || '',
+            father_name: student.father_name || '',
+            mother_name: student.mother_name || '',
+            phone_number: student.phone_number || '',
+            address: student.address || '',
+        });
+        clearErrors();
+        setIsModalOpen(true);
+    };
+
+    const openDeleteModal = (student: StudentData) => {
+        setSelectedStudent(student);
+        setIsDeleteOpen(true);
+    };
+
+    const handleModalSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (modalMode === 'create') {
+            post('/student/store', {
+                onSuccess: () => {
+                    setIsModalOpen(false);
+                    reset();
+                },
+            });
+        } else {
+            put(`/student/${selectedStudent?.id}`, {
+                onSuccess: () => {
+                    setIsModalOpen(false);
+                    reset();
+                },
+            });
+        }
+    };
+
+    const handleDelete = () => {
+        if (selectedStudent?.id) {
+            destroy(`/student/${selectedStudent.id}`, {
+                onSuccess: () => {
+                    setIsDeleteOpen(false);
+                    setSelectedStudent(null);
+                },
+            });
+        }
+    };
+
     return (
         <>
             <Head title="Student" />
@@ -50,10 +163,8 @@ export default function Student(){
                         </Breadcrumb>
                     </div>
                     <div>
-                        <Button asChild>
-                            <Link className="" href="">
-                                Add Student
-                            </Link>
+                        <Button onClick={openCreateModal}>
+                            Add Student
                         </Button>
                     </div>
                 </div>
@@ -66,97 +177,230 @@ export default function Student(){
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>No</TableHead>
-                                        <TableHead>Full Name</TableHead>
-                                        <TableHead> Email</TableHead>
-                                        <TableHead> Father Name</TableHead>
-                                        <TableHead> Mother Name</TableHead>
-                                        <TableHead> Phone Number</TableHead>
-                                        <TableHead> Address</TableHead>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>Class</TableHead>
+                                        <TableHead>Roll</TableHead>
+                                        <TableHead>Gender</TableHead>
+                                        <TableHead>Email</TableHead>
+                                        <TableHead>Phone</TableHead>
                                         <TableHead className="flex justify-end">
                                             Actions
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    <TableRow>
-                                        <TableCell>
-                                            01
-                                        </TableCell>
-                                        <TableCell>
-                                            Jahid hassan
-                                        </TableCell>
-                                        <TableCell>
-                                            jahid@gmail.com
-                                        </TableCell>
-                                        <TableCell>
-                                            Abul Kasham
-                                        </TableCell>
-                                        <TableCell>
-                                            Taslima Bagum
-                                        </TableCell>
-                                        <TableCell>
-                                            01989619006
-                                        </TableCell>
-                                        <TableCell>
-                                            Navaron
-                                        </TableCell>
-                                        <TableCell className="flex justify-end gap-4">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger
-                                                    asChild
-                                                >
-                                                    <Button variant="outline">
-                                                        <Ellipsis />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent
-                                                    className="w-40"
-                                                    align="end"
-                                                >
-                                                    <DropdownMenuGroup>
-
-                                                        <DropdownMenuItem
-                                                            asChild
-                                                        >
-                                                            <Link>
-                                                                View
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            asChild
-                                                        >
-                                                            <Link>
-                                                                Edit
-                                                            </Link>
-                                                        </DropdownMenuItem>
-
-                                                        <DropdownMenuItem
-                                                            asChild
-                                                        >
-                                                            <Link
-                                                                method="delete"
-                                                                as="button"
-                                                                className="w-full"
-                                                                onClick={(e) => {
-                                                                    if (!confirm('Are you sure you want to delete this Student?')) {
-                                                                        e.preventDefault();
-                                                                    }
-                                                                }}
-                                                            >
-                                                                Delete
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuGroup>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
+                                    {students && students.length > 0 ? (
+                                        students.map((student, index) => (
+                                            <TableRow key={student.id}>
+                                                <TableCell>
+                                                    {(index + 1).toString().padStart(2, '0')}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {student.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {student.class} ({student.section})
+                                                </TableCell>
+                                                <TableCell>
+                                                    {student.roll_number}
+                                                </TableCell>
+                                                <TableCell className="capitalize">
+                                                    {student.gender}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {student.email}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {student.phone_number}
+                                                </TableCell>
+                                                <TableCell className="flex justify-end gap-4">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="outline">
+                                                                <Ellipsis />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent className="w-40" align="end">
+                                                            <DropdownMenuGroup>
+                                                                <DropdownMenuItem onClick={() => openEditModal(student)}>
+                                                                    Edit
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => openDeleteModal(student)}>
+                                                                    Delete
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuGroup>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell
+                                                colSpan={8}
+                                                className="text-center text-muted-foreground py-8"
+                                            >
+                                                No students found.
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
                                 </TableBody>
                             </Table>
                         </CardContent>
                     </Card>
                 </div>
             </div>
+
+            {/* Create/Edit Modal */}
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-[700px] overflow-y-auto max-h-[90vh]">
+                    <form onSubmit={handleModalSubmit}>
+                        <DialogHeader>
+                            <DialogTitle>{modalMode === 'create' ? 'Add Student' : 'Edit Student'}</DialogTitle>
+                            <DialogDescription>
+                                {modalMode === 'create' ? 'Add a new student to the system.' : 'Update the student details.'}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid grid-cols-2 gap-4 py-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="name">Full Name</Label>
+                                <Input
+                                    id="name"
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                />
+                                {errors.name && <span className="text-sm text-red-500">{errors.name}</span>}
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    value={data.email}
+                                    onChange={(e) => setData('email', e.target.value)}
+                                />
+                                {errors.email && <span className="text-sm text-red-500">{errors.email}</span>}
+                            </div>
+                            
+                            <div className="grid gap-2">
+                                <Label htmlFor="date_of_birth">Date of Birth</Label>
+                                <Input
+                                    id="date_of_birth"
+                                    type="date"
+                                    value={data.date_of_birth}
+                                    onChange={(e) => setData('date_of_birth', e.target.value)}
+                                />
+                                {errors.date_of_birth && <span className="text-sm text-red-500">{errors.date_of_birth}</span>}
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="gender">Gender</Label>
+                                <Select value={data.gender} onValueChange={(val) => setData('gender', val)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select gender" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="male">Male</SelectItem>
+                                        <SelectItem value="female">Female</SelectItem>
+                                        <SelectItem value="other">Other</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                {errors.gender && <span className="text-sm text-red-500">{errors.gender}</span>}
+                            </div>
+                            
+                            <div className="grid gap-2">
+                                <Label htmlFor="class">Class</Label>
+                                <Input
+                                    id="class"
+                                    value={data.class}
+                                    onChange={(e) => setData('class', e.target.value)}
+                                />
+                                {errors.class && <span className="text-sm text-red-500">{errors.class}</span>}
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="section">Section</Label>
+                                <Input
+                                    id="section"
+                                    value={data.section}
+                                    onChange={(e) => setData('section', e.target.value)}
+                                />
+                                {errors.section && <span className="text-sm text-red-500">{errors.section}</span>}
+                            </div>
+                            
+                            <div className="grid gap-2">
+                                <Label htmlFor="roll_number">Roll Number</Label>
+                                <Input
+                                    id="roll_number"
+                                    value={data.roll_number}
+                                    onChange={(e) => setData('roll_number', e.target.value)}
+                                />
+                                {errors.roll_number && <span className="text-sm text-red-500">{errors.roll_number}</span>}
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="phone_number">Phone Number</Label>
+                                <Input
+                                    id="phone_number"
+                                    value={data.phone_number}
+                                    onChange={(e) => setData('phone_number', e.target.value)}
+                                />
+                                {errors.phone_number && <span className="text-sm text-red-500">{errors.phone_number}</span>}
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="father_name">Father Name</Label>
+                                <Input
+                                    id="father_name"
+                                    value={data.father_name}
+                                    onChange={(e) => setData('father_name', e.target.value)}
+                                />
+                                {errors.father_name && <span className="text-sm text-red-500">{errors.father_name}</span>}
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="mother_name">Mother Name</Label>
+                                <Input
+                                    id="mother_name"
+                                    value={data.mother_name}
+                                    onChange={(e) => setData('mother_name', e.target.value)}
+                                />
+                                {errors.mother_name && <span className="text-sm text-red-500">{errors.mother_name}</span>}
+                            </div>
+                            
+                            <div className="grid gap-2 col-span-2">
+                                <Label htmlFor="address">Address</Label>
+                                <Input
+                                    id="address"
+                                    value={data.address}
+                                    onChange={(e) => setData('address', e.target.value)}
+                                />
+                                {errors.address && <span className="text-sm text-red-500">{errors.address}</span>}
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                            <Button type="submit" disabled={processing}>
+                                {modalMode === 'create' ? 'Save' : 'Update'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Modal */}
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Confirm Deletion</DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to delete {selectedStudent?.name}? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+                        <Button type="button" variant="destructive" disabled={processing} onClick={handleDelete}>
+                            Delete
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

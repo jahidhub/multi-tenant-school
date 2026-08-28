@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('tenant_id')->nullable()->constrained('tenants')->cascadeOnDelete();
             $table->foreignId('teacher_id')->nullable()->constrained('teachers')->cascadeOnDelete();
             $table->string('course_name', 100);
+            $table->timestamps();
         });
     }
 
