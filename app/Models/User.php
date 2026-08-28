@@ -18,6 +18,11 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

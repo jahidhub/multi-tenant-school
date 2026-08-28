@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class CourseController extends Controller
 {
@@ -11,15 +16,23 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $tenant_id = Auth::user()->tenant_id;
+        $courses = Course::query()
+            ->where('tenant_id', $tenant_id)
+            ->with('teacher')
+            ->paginate(5);
+            
+        $teachers = Teacher::query()
+            ->where('tenant_id', $tenant_id)
+            ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Inertia::render(
+            'course/index',
+            [
+                'courses' => $courses,
+                'teachers' => $teachers,
+            ]
+        );
     }
 
     /**
@@ -27,23 +40,26 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $tenant_id = Auth::user()->tenant_id;
+        
+        $validated = $request->validate([
+            "course_name" => "required|string|max:100",
+            "teacher_id" => [
+                "nullable",
+                Rule::exists('teachers', 'id')->where(function ($query) use ($tenant_id) {
+                    $query->where('tenant_id', $tenant_id);
+                })
+            ],
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $validated['tenant_id'] = $tenant_id;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        Course::create($validated);
+
+        return to_route('course.index')->with([
+            'type' => 'success',
+            'message' => 'Course created successfully',
+        ]);
     }
 
     /**
@@ -51,7 +67,27 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $tenant_id = Auth::user()->tenant_id;
+        
+        $validated = $request->validate([
+            "course_name" => "required|string|max:100",
+            "teacher_id" => [
+                "nullable",
+                Rule::exists('teachers', 'id')->where(function ($query) use ($tenant_id) {
+                    $query->where('tenant_id', $tenant_id);
+                })
+            ],
+        ]);
+
+        Course::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('id', $id)
+            ->update($validated);
+
+        return to_route('course.index')->with([
+            'type' => 'success',
+            'message' => 'Course updated successfully',
+        ]);
     }
 
     /**
@@ -59,6 +95,16 @@ class CourseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $tenant_id = Auth::user()->tenant_id;
+
+        Course::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('id', $id)
+            ->delete();
+
+        return to_route('course.index')->with([
+            'type' => 'success',
+            'message' => 'Course deleted successfully',
+        ]);
     }
 }

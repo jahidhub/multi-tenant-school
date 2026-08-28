@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +26,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/student/store', [StudentController::class, 'store'])->name('student.store');
     Route::put('/student/{id}', [StudentController::class, 'update'])->name('student.update');
     Route::delete('/student/{id}', [StudentController::class, 'destroy'])->name('student.destroy');
+
+    Route::get('/courses', [CourseController::class, 'index'])->name('course.index');
+    Route::post('/course/store', [CourseController::class, 'store'])->name('course.store');
+    Route::put('/course/{id}', [CourseController::class, 'update'])->name('course.update');
+    Route::delete('/course/{id}', [CourseController::class, 'destroy'])->name('course.destroy');
+
+    Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollment.index');
+    Route::post('/enrollment/store', [EnrollmentController::class, 'store'])->name('enrollment.store');
+    Route::put('/enrollment/{id}', [EnrollmentController::class, 'update'])->name('enrollment.update');
+    Route::delete('/enrollment/{id}', [EnrollmentController::class, 'destroy'])->name('enrollment.destroy');
 });
 
 require __DIR__ . '/settings.php';

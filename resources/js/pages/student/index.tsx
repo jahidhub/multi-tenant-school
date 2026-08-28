@@ -177,6 +177,7 @@ export default function Student({ students = [] }: { students?: any }) {
                                         <TableHead>Name</TableHead>
                                         <TableHead>Class</TableHead>
                                         <TableHead>Roll</TableHead>
+                                        <TableHead>Date of Birth</TableHead>
                                         <TableHead>Gender</TableHead>
                                         <TableHead>Father Name</TableHead>
                                         <TableHead>Guardian Phone</TableHead>
@@ -200,6 +201,9 @@ export default function Student({ students = [] }: { students?: any }) {
                                                 </TableCell>
                                                 <TableCell>
                                                     {student.roll_number}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {student.date_of_birth}
                                                 </TableCell>
                                                 <TableCell className="capitalize">
                                                     {student.gender}
