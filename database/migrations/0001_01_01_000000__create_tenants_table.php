@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->string('school_name', 100);
+            $table->string('name', 100);
             $table->string('slug')->unique()->nullable();
+            $table->string('domain')->nullable();
             $table->string('status')->default('active');
-            $table->string('address',200)->nullable();
+            $table->string('plan')->default('basic');
+            $table->json('settings')->nullable();
             $table->timestamps();
         });
     }

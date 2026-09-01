@@ -18,6 +18,10 @@ class TenantController extends Controller
      */
     public function edit(): Response
     {
+        if (!Auth::user()->tenant_id) {
+            abort(403, 'Only school administrators can access this page.');
+        }
+
         $tenant = Tenant::findOrFail(Auth::user()->tenant_id);
 
         return Inertia::render('settings/tenant', [
@@ -31,17 +35,14 @@ class TenantController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        if (!Auth::user()->tenant_id) {
+            abort(403, 'Only school administrators can update this page.');
+        }
+
         $tenant = Tenant::findOrFail(Auth::user()->tenant_id);
 
         $validated = $request->validate([
-            'school_name' => 'required|string|max:100',
-            'slug' => [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::unique('tenants', 'slug')->ignore($tenant->id),
-            ],
-            'status' => 'required|string|in:active,inactive',
+            'name' => 'required|string|max:100',
             'address' => 'nullable|string|max:200',
         ]);
 
@@ -49,6 +50,6 @@ class TenantController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('School settings updated successfully.')]);
 
-        return to_route('tenant.edit');
+        return to_route('tenant.edit')->with('status', 'school-updated');
     }
 }

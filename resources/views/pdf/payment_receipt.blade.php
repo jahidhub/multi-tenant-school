@@ -130,7 +130,7 @@
         <table class="header-table">
             <tr>
                 <td>
-                    <div class="header-logo-text">{{ $tenant->school_name }}</div>
+                    <div class="header-logo-text">{{ $tenant->name }}</div>
                     <div class="header-subtext">{{ $tenant->address ?? 'Primary & Secondary Education' }}</div>
                 </td>
                 <td class="header-right">

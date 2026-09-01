@@ -39,7 +39,7 @@ class CreateNewUser implements CreatesNewUsers
             }
 
             $tenant = Tenant::create([
-                'school_name' => $input['school_name'],
+                'name' => $input['school_name'],
                 'slug' => $slug,
                 'status' => 'active',
             ]);

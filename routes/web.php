@@ -20,12 +20,31 @@ Route::inertia('/', 'welcome', [
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Super-Admin routes
+    Route::middleware([\App\Http\Middleware\SuperAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'index'])->name('tenants.index');
+        Route::get('/tenants/create', [\App\Http\Controllers\Admin\TenantController::class, 'create'])->name('tenants.create');
+        Route::post('/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'store'])->name('tenants.store');
+        Route::get('/tenants/{tenant}/edit', [\App\Http\Controllers\Admin\TenantController::class, 'edit'])->name('tenants.edit');
+        Route::put('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'update'])->name('tenants.update');
+        Route::post('/tenants/{tenant}/impersonate', [\App\Http\Controllers\Admin\TenantController::class, 'impersonate'])->name('tenants.impersonate');
+    });
+
+    Route::post('/impersonation/leave', [\App\Http\Controllers\Admin\TenantController::class, 'leaveImpersonation'])->name('impersonation.leave');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
+        if (Auth::user()->role === 'super-admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        
         $tenant_id = Auth::user()->tenant_id;
         
-        $totalStudents = \App\Models\Student::where('tenant_id', $tenant_id)->count();
-        $totalTeachers = \App\Models\Teacher::where('tenant_id', $tenant_id)->count();
-        $totalCourses = \App\Models\Course::where('tenant_id', $tenant_id)->count();
+        $totalStudents = \App\Models\Student::query()->where('tenant_id', '=', $tenant_id)->count('*');
+        $totalTeachers = \App\Models\Teacher::query()->where('tenant_id', '=', $tenant_id)->count('*');
+        $totalCourses = \App\Models\Course::query()->where('tenant_id', '=', $tenant_id)->count('*');
 
         // Query overdue invoices
         $overdueInvoices = \App\Models\Invoice::query()

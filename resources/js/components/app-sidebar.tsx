@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     Award,
     Book,
@@ -88,19 +88,31 @@ const mainNavItems: NavItem[] = [
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
+    // {
+    //     title: 'Repository',
+    //     href: 'https://github.com/laravel/react-starter-kit',
+    //     icon: FolderGit2,
+    // },
+    
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage<any>().props;
+    const isSuperAdmin = auth.user.role === 'super-admin';
+    
+    const navItems = isSuperAdmin ? [
+        {
+            title: 'Dashboard',
+            href: '/admin/dashboard',
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Schools',
+            href: '/admin/tenants',
+            icon: ClipboardList,
+        },
+    ] : mainNavItems;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -116,7 +128,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={navItems} />
             </SidebarContent>
 
             <SidebarFooter>
