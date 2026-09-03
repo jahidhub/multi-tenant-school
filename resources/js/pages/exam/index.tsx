@@ -47,7 +47,7 @@ import { Pagination } from '@/components/pagination';
 
 interface CourseData {
     id: number;
-    course_name: string;
+    name: string;
 }
 
 interface ExamData {
@@ -204,7 +204,7 @@ export default function Exam({ exams, courses = [] }: ExamProps) {
                                                 </TableCell>
                                                 <TableCell className="font-medium">{exam.name}</TableCell>
                                                 <TableCell>
-                                                    {exam.course ? exam.course.course_name : <span className="text-muted-foreground italic">No Course</span>}
+                                                    {exam.course ? exam.course.name : <span className="text-muted-foreground italic">No Course</span>}
                                                 </TableCell>
                                                 <TableCell>{exam.max_marks}</TableCell>
                                                 <TableCell>{exam.exam_date}</TableCell>
@@ -280,7 +280,7 @@ export default function Exam({ exams, courses = [] }: ExamProps) {
                                     <SelectContent>
                                         {courses.map((course) => (
                                             <SelectItem key={course.id} value={course.id.toString()}>
-                                                {course.course_name}
+                                                {course.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

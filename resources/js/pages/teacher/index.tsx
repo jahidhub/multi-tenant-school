@@ -47,7 +47,7 @@ import { Pagination } from '@/components/pagination';
 
 interface CourseData {
     id: number;
-    course_name: string;
+    name: string;
 }
 
 interface TeacherData {
@@ -292,7 +292,7 @@ export default function Teacher({ teachers = { data: [], links: [] }, courses = 
                                                     </span>
                                                 </TableCell>
                                                 <TableCell>
-                                                    {teacher.courses?.map(c => c.course_name).join(', ') || 'None'}
+                                                    {teacher.courses?.map(c => c.name).join(', ') || 'None'}
                                                 </TableCell>
                                                 <TableCell className="flex justify-end gap-4">
                                                     <DropdownMenu>
@@ -419,7 +419,7 @@ export default function Teacher({ teachers = { data: [], links: [] }, courses = 
                                                 onChange={() => handleCourseToggle(course.id)}
                                                 className="rounded border-gray-300"
                                             />
-                                            <span>{course.course_name}</span>
+                                            <span>{course.name}</span>
                                         </label>
                                     ))}
                                     {courses.length === 0 && <span className="text-sm text-gray-500">No courses available.</span>}
@@ -527,7 +527,7 @@ export default function Teacher({ teachers = { data: [], links: [] }, courses = 
                             </div>
                             <div className="col-span-2 bg-muted/50 p-3 rounded-lg">
                                 <h4 className="text-sm font-medium text-muted-foreground">Assigned Courses</h4>
-                                <p className="font-semibold">{selectedTeacher.courses?.map(c => c.course_name).join(', ') || 'None'}</p>
+                                <p className="font-semibold">{selectedTeacher.courses?.map(c => c.name).join(', ') || 'None'}</p>
                             </div>
                         </div>
                     )}

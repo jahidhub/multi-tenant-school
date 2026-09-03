@@ -85,6 +85,7 @@ interface StudentProps {
         id: number;
         name: string;
         admission_no: string;
+        roll_number: string | null;
         class: string;
         dob: string;
         gender: string;
@@ -193,7 +194,7 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
                             </span>
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">
-                            Class: <span className="font-semibold text-foreground">{student.class}</span> | Admission No: <span className="font-semibold text-foreground">{student.admission_no || 'N/A'}</span>
+                            Class: <span className="font-semibold text-foreground">{student.class}</span> | Roll Number: <span className="font-semibold text-foreground">{student.roll_number || 'N/A'}</span> | Admission No: <span className="font-semibold text-foreground">{student.admission_no || 'N/A'}</span>
                         </p>
                     </div>
                 </div>

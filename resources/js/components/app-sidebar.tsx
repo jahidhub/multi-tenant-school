@@ -12,6 +12,9 @@ import {
     LayoutGrid,
     Receipt,
     User,
+    Calendar,
+    CalendarCheck,
+    LineChart,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -84,6 +87,21 @@ const mainNavItems: NavItem[] = [
         title: 'Invoices',
         href: '/invoices',
         icon: Receipt,
+    },
+    {
+        title: 'Timetable',
+        href: '/timetable',
+        icon: Calendar,
+    },
+    {
+        title: 'Mark Attendance',
+        href: '/attendance',
+        icon: CalendarCheck,
+    },
+    {
+        title: 'Attendance Report',
+        href: '/attendance/report',
+        icon: LineChart,
     },
 ];
 

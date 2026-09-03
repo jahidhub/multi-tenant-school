@@ -26,7 +26,7 @@ interface ExamData {
     exam_date: string;
     max_marks: number;
     course?: {
-        course_name: string;
+        name: string;
     } | null;
 }
 
@@ -109,7 +109,7 @@ export default function Marks({ exam, students = [] }: MarksProps) {
                             <div className="flex flex-col gap-1">
                                 <div>Student Gradesheet - {exam.name}</div>
                                 <div className="text-sm font-normal text-muted-foreground">
-                                    Course: <span className="font-semibold text-foreground">{exam.course?.course_name || 'N/A'}</span> | Max Marks: <span className="font-semibold text-foreground">{exam.max_marks}</span>
+                                    Course: <span className="font-semibold text-foreground">{exam.course?.name || 'N/A'}</span> | Max Marks: <span className="font-semibold text-foreground">{exam.max_marks}</span>
                                 </div>
                             </div>
                         </CardHeader>

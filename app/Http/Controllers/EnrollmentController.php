@@ -30,6 +30,7 @@ class EnrollmentController extends Controller
 
         $courses = Course::query()
             ->where('tenant_id', $tenant_id)
+            ->where('status', 'active')
             ->get();
 
         return Inertia::render('enrollment/index', [

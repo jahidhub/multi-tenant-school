@@ -11,6 +11,8 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\FeeStructureController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Auth;
@@ -122,6 +124,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/report-cards', [ReportCardController::class, 'index'])->name('report_card.index');
     Route::get('/students/{student}/report-card', [ReportCardController::class, 'download'])->name('report_card.download');
+    Route::delete('/students/{student}/report-card', [ReportCardController::class, 'destroy'])->name('report_card.destroy');
 
     Route::get('/fee-structures', [FeeStructureController::class, 'index'])->name('fee_structure.index');
     Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee_structure.store');
@@ -135,6 +138,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/invoice/{id}/record-payment', [InvoiceController::class, 'recordPayment'])->name('invoice.record_payment');
 
     Route::get('/payments/{id}/receipt', [PaymentController::class, 'downloadReceipt'])->name('payment.receipt');
+
+    Route::get('/timetable', [TimetableController::class, 'index'])->name('timetable.index');
+    Route::post('/timetable', [TimetableController::class, 'store'])->name('timetable.store');
+    Route::put('/timetable/{id}', [TimetableController::class, 'update'])->name('timetable.update');
+    Route::delete('/timetable/{id}', [TimetableController::class, 'destroy'])->name('timetable.destroy');
+
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/report', [AttendanceController::class, 'report'])->name('attendance.report');
 });
 
 require __DIR__ . '/settings.php';

@@ -22,6 +22,7 @@ class ReportCardController extends Controller
         $tenant_id = Auth::user()->tenant_id;
         $students = Student::query()
             ->where('tenant_id', $tenant_id)
+            ->whereHas('grades')
             ->paginate(5);
 
         // Map through the items to calculate GPA and grade dynamically
@@ -146,7 +147,7 @@ class ReportCardController extends Controller
             }
 
             $reportData[] = [
-                'course_name' => $course->course_name,
+                'course_name' => $course->name,
                 'exams' => $examsData,
             ];
         }
@@ -171,5 +172,23 @@ class ReportCardController extends Controller
         $pdf = Pdf::loadView('pdf.report_card', $data);
 
         return $pdf->download("report_card_{$student->name}.pdf");
+    }
+
+    /**
+     * Delete all grades for a student (effectively deleting their report card).
+     */
+    public function destroy(string $student_id)
+    {
+        $tenant_id = Auth::user()->tenant_id;
+
+        Grade::query()
+            ->where('tenant_id', $tenant_id)
+            ->where('student_id', $student_id)
+            ->delete();
+
+        return to_route('report_card.index')->with([
+            'type' => 'success',
+            'message' => 'Report card (all grades) deleted successfully for this student.',
+        ]);
     }
 }

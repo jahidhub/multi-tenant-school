@@ -51,6 +51,7 @@ interface StudentData {
     id: number;
     name: string;
     admission_no: string;
+    roll_number: string | null;
     class: string;
     dob: string | null;
     gender: string | null;
@@ -84,6 +85,7 @@ export default function Student({ students = { data: [], links: [] }, filters = 
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         name: '',
         class: '',
+        roll_number: '',
         dob: '',
         gender: '',
         guardian_name: '',
@@ -140,6 +142,7 @@ export default function Student({ students = { data: [], links: [] }, filters = 
         setData({
             name: student.name || '',
             class: student.class || '',
+            roll_number: student.roll_number || '',
             dob: student.dob || '',
             gender: student.gender || '',
             guardian_name: student.guardian_name || '',
@@ -359,6 +362,7 @@ export default function Student({ students = { data: [], links: [] }, filters = 
                                         </TableHead>
                                         <TableHead>Photo</TableHead>
                                         <TableHead>Admission No</TableHead>
+                                        <TableHead>Roll No</TableHead>
                                         <TableHead>Name</TableHead>
                                         <TableHead>Class</TableHead>
                                         <TableHead>Gender</TableHead>
@@ -387,6 +391,9 @@ export default function Student({ students = { data: [], links: [] }, filters = 
                                                 </TableCell>
                                                 <TableCell className="font-medium text-blue-600">
                                                     {student.admission_no}
+                                                </TableCell>
+                                                <TableCell className="font-medium">
+                                                    {student.roll_number || '-'}
                                                 </TableCell>
                                                 <TableCell>
                                                     {student.name}
@@ -464,6 +471,12 @@ export default function Student({ students = { data: [], links: [] }, filters = 
                                 <Label htmlFor="class">Class/Grade *</Label>
                                 <Input id="class" value={data.class} onChange={(e) => setData('class', e.target.value)} required placeholder="Grade 10-A" />
                                 {errors.class && <span className="text-sm text-red-500">{errors.class}</span>}
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="roll_number">Roll Number</Label>
+                                <Input id="roll_number" value={data.roll_number} onChange={(e) => setData('roll_number', e.target.value)} placeholder="A-01" />
+                                {errors.roll_number && <span className="text-sm text-red-500">{errors.roll_number}</span>}
                             </div>
 
                             <div className="grid gap-2">

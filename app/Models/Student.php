@@ -14,4 +14,8 @@ class Student extends Model
     use BelongsToTenant, SoftDeletes;
     protected $guarded = [];
 
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }

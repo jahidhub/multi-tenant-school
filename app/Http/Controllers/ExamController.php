@@ -27,6 +27,7 @@ class ExamController extends Controller
 
         $courses = Course::query()
             ->where('tenant_id', $tenant_id)
+            ->where('status', 'active')
             ->get();
 
         return Inertia::render('exam/index', [
@@ -171,6 +172,8 @@ class ExamController extends Controller
             abort(403);
         }
 
+        \Illuminate\Support\Facades\Log::info('storeMarks called', $request->all());
+
         $validated = $request->validate([
             'marks' => 'required|array',
             'marks.*.student_id' => [
@@ -184,6 +187,7 @@ class ExamController extends Controller
         ]);
 
         foreach ($validated['marks'] as $markData) {
+            \Illuminate\Support\Facades\Log::info('saving grade', $markData);
             Grade::updateOrCreate(
                 [
                     'tenant_id' => $tenant_id,
@@ -191,7 +195,7 @@ class ExamController extends Controller
                     'student_id' => $markData['student_id'],
                 ],
                 [
-                    'marks_obtained' => $markData['marks_obtained'] === '' ? null : $markData['marks_obtained'],
+                    'marks_obtained' => (isset($markData['marks_obtained']) && $markData['marks_obtained'] !== '') ? $markData['marks_obtained'] : null,
                     'remarks' => $markData['remarks'] ?? null,
                 ]
             );

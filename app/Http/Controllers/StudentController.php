@@ -49,6 +49,7 @@ class StudentController extends Controller
         $validated = $request->validate([
             "name" => "required|string|max:50",
             "class" => "required|string|max:20",
+            "roll_number" => "nullable|string|max:30",
             "dob" => "nullable|date",
             "gender" => "nullable|string|max:10",
             "guardian_name" => "nullable|string|max:50",
@@ -139,6 +140,7 @@ class StudentController extends Controller
         $validated = $request->validate([
             "name" => "required|string|max:50",
             "class" => "required|string|max:20",
+            "roll_number" => "nullable|string|max:30",
             "dob" => "nullable|date",
             "gender" => "nullable|string|max:10",
             "guardian_name" => "nullable|string|max:50",
@@ -281,7 +283,7 @@ class StudentController extends Controller
             "Expires"             => "0"
         ];
 
-        $columns = ['ID', 'Admission No', 'Name', 'Class', 'DOB', 'Gender', 'Guardian Name', 'Guardian Phone', 'Status', 'Archived'];
+        $columns = ['ID', 'Admission No', 'Roll Number', 'Name', 'Class', 'DOB', 'Gender', 'Guardian Name', 'Guardian Phone', 'Status', 'Archived'];
 
         $callback = function () use ($students, $columns) {
             $file = fopen('php://output', 'w');
@@ -291,6 +293,7 @@ class StudentController extends Controller
                 fputcsv($file, [
                     $student->id,
                     $student->admission_no,
+                    $student->roll_number,
                     $student->name,
                     $student->class,
                     $student->dob,
@@ -339,6 +342,7 @@ class StudentController extends Controller
                     'admission_no' => $admission_no,
                     'name' => $row['name'] ?? 'Unknown',
                     'class' => $row['class'] ?? 'N/A',
+                    'roll_number' => $row['roll_number'] ?? null,
                     'dob' => !empty($row['dob']) ? date('Y-m-d', strtotime($row['dob'])) : null,
                     'gender' => $row['gender'] ?? null,
                     'guardian_name' => $row['guardian_name'] ?? null,

@@ -1,6 +1,15 @@
-import { Head } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import {
     Table,
     TableBody,
@@ -43,8 +52,30 @@ interface ReportProps {
 export default function ReportCardList({ students }: ReportProps) {
     const studentsList = students?.data || [];
 
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState<StudentData | null>(null);
+
+    const { delete: destroy, processing } = useForm();
+
     const handleDownloadReport = (studentId: number) => {
         window.open(`/students/${studentId}/report-card`, '_blank');
+    };
+
+    const openDeleteModal = (student: StudentData) => {
+        setSelectedStudent(student);
+        setIsDeleteOpen(true);
+    };
+
+    const handleDeleteSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (selectedStudent) {
+            destroy(`/students/${selectedStudent.id}/report-card`, {
+                onSuccess: () => {
+                    setIsDeleteOpen(false);
+                    setSelectedStudent(null);
+                },
+            });
+        }
     };
 
     return (
@@ -110,13 +141,22 @@ export default function ReportCardList({ students }: ReportProps) {
                                                     {student.grade}
                                                 </TableCell>
                                                 <TableCell className="text-right">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => handleDownloadReport(student.id)}
-                                                    >
-                                                        Download PDF
-                                                    </Button>
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => handleDownloadReport(student.id)}
+                                                        >
+                                                            Download PDF
+                                                        </Button>
+                                                        <Button
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => openDeleteModal(student)}
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -132,6 +172,27 @@ export default function ReportCardList({ students }: ReportProps) {
                         </CardContent>
                     </Card>
                 </div>
+                {/* Delete Confirmation Modal */}
+                <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                    <DialogContent className="max-w-[400px]">
+                        <DialogHeader>
+                            <DialogTitle>Delete Report Card</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete the report card for <strong>{selectedStudent?.name}</strong>? This will clear all their exam grades. This action cannot be undone.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <form onSubmit={handleDeleteSubmit}>
+                            <DialogFooter className="pt-2">
+                                <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)}>
+                                    Cancel
+                                </Button>
+                                <Button type="submit" variant="destructive" disabled={processing}>
+                                    Delete Grades
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
         </>
     );

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('guardian_name', 50)->nullable();
             $table->string('guardian_phone', 20)->nullable(); 
             $table->string('class', 20); // Class/Grade
+            $table->string('roll_number', 30)->nullable(); // Roll Number within the class
             $table->string('status', 20)->default('active'); // active, inactive
             $table->string('profile_photo_path', 255)->nullable();
             $table->string('address', 100)->nullable(); 

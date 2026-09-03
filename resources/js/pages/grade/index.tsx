@@ -49,7 +49,7 @@ interface ExamData {
     name: string;
     max_marks: number;
     course?: {
-        course_name: string;
+        name: string;
     } | null;
 }
 
@@ -185,7 +185,7 @@ export default function GradeList({ grades }: GradeProps) {
                                                     {grade.student?.name || '-'}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {grade.exam?.course?.course_name || '-'}
+                                                    {grade.exam?.course?.name || '-'}
                                                 </TableCell>
                                                 <TableCell>{grade.exam?.name || '-'}</TableCell>
                                                 <TableCell className="font-semibold text-green-600 dark:text-green-400">
