@@ -67,13 +67,15 @@ interface StudentProps {
     student: {
         id: number;
         name: string;
+        admission_no: string;
         class: string;
-        roll_number: string;
-        date_of_birth: string;
+        dob: string;
         gender: string;
-        father_name: string;
+        guardian_name: string;
         guardian_phone: string;
         address: string;
+        status: string;
+        profile_photo_path: string | null;
     };
     enrollments: EnrollmentData[];
     grades: GradeData[];
@@ -136,13 +138,22 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
 
                 {/* Profile Header */}
                 <div className="flex flex-col md:flex-row gap-6 items-center p-6 bg-card border rounded-xl">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-2xl font-bold dark:bg-blue-900/30 dark:text-blue-400">
-                        {student.name.charAt(0)}
-                    </div>
+                    {student.profile_photo_path ? (
+                        <img src={`/storage/${student.profile_photo_path}`} alt="Profile" className="h-20 w-20 rounded-full object-cover shadow-sm border-2 border-primary" />
+                    ) : (
+                        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-3xl font-bold dark:bg-blue-900/30 dark:text-blue-400">
+                            {student.name.charAt(0)}
+                        </div>
+                    )}
                     <div className="flex-1 text-center md:text-left">
-                        <h1 className="text-2xl font-bold tracking-tight">{student.name}</h1>
-                        <p className="text-sm text-muted-foreground">
-                            Class: <span className="font-semibold text-foreground">{student.class}</span> | Roll Number: <span className="font-semibold text-foreground">{student.roll_number || 'N/A'}</span>
+                        <div className="flex items-center gap-3 justify-center md:justify-start">
+                            <h1 className="text-3xl font-bold tracking-tight">{student.name}</h1>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${student.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                {student.status?.toUpperCase()}
+                            </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            Class: <span className="font-semibold text-foreground">{student.class}</span> | Admission No: <span className="font-semibold text-foreground">{student.admission_no || 'N/A'}</span>
                         </p>
                     </div>
                 </div>
@@ -190,12 +201,12 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
                                 <CardHeader>Personal Details</CardHeader>
                                 <CardContent className="space-y-4">
                                     <div>
-                                        <div className="text-xs text-muted-foreground">Father's Name</div>
-                                        <div className="font-medium">{student.father_name || 'N/A'}</div>
+                                        <div className="text-xs text-muted-foreground">Guardian's Name</div>
+                                        <div className="font-medium">{student.guardian_name || 'N/A'}</div>
                                     </div>
                                     <div>
                                         <div className="text-xs text-muted-foreground">Date of Birth</div>
-                                        <div className="font-medium">{student.date_of_birth || 'N/A'}</div>
+                                        <div className="font-medium">{student.dob || 'N/A'}</div>
                                     </div>
                                     <div>
                                         <div className="text-xs text-muted-foreground">Gender</div>

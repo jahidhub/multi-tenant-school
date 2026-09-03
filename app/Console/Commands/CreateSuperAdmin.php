@@ -20,13 +20,17 @@ class CreateSuperAdmin extends Command
     {
         $email = $this->ask('Email');
         $password = $this->ask('Password');
-        User::create([
-            'name' => 'Super Admin',
-            'email' => $email,
-            'password' => Hash::make($password),
-            'role' => 'super-admin',
-            'tenant_id' => null,
-        ]);
+        
+        User::updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make($password),
+                'role' => 'super-admin', 
+                'tenant_id' => null,
+            ]
+        );
+        
         $this->info('Super admin created.');
     }
 }

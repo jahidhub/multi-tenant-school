@@ -7,8 +7,11 @@ use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Student extends Model
 {
-    use BelongsToTenant;
+    use BelongsToTenant, SoftDeletes;
     protected $guarded = [];
+
 }

@@ -18,6 +18,11 @@ class Course extends Model
         'course_name',
     ];
 
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class);
+    }
+
     public function teacher()
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');

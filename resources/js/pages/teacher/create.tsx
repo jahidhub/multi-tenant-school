@@ -1,4 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import InputError from '@/components/input-error';
 import {
@@ -18,14 +19,29 @@ export default function TeacherCreate() {
     const { data, setData, post, errors, processing } = useForm<{
         name: string;
         phone: string;
-        subject: string;
+        subject_specialty: string;
         address: string;
+        profile_photo: File | null;
     }>({
         name: '',
         phone: '',
-        subject: '',
+        subject_specialty: '',
         address: '',
+        profile_photo: null,
     });
+
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setData('profile_photo', file);
+            setPreviewUrl(URL.createObjectURL(file));
+        } else {
+            setData('profile_photo', null);
+            setPreviewUrl(null);
+        }
+    };
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -114,22 +130,22 @@ export default function TeacherCreate() {
                                         <InputError message={errors.phone} />
                                     </Field>
                                     <Field>
-                                        <FieldLabel htmlFor="subject">
+                                        <FieldLabel htmlFor="subject_specialty">
                                             Subject
                                         </FieldLabel>
                                         <Input
-                                            id="subject"
+                                            id="subject_specialty"
                                             type="text"
-                                            value={data.subject}
+                                            value={data.subject_specialty}
                                             onChange={(e) =>
                                                 setData(
-                                                    'subject',
+                                                    'subject_specialty',
                                                     e.target.value,
                                                 )
                                             }
                                            
                                         />
-                                        <InputError message={errors.subject} />
+                                        <InputError message={errors.subject_specialty} />
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="address">
@@ -147,6 +163,24 @@ export default function TeacherCreate() {
                                             }
                                         />
                                         <InputError message={errors.address} />
+                                    </Field>
+                                    
+                                    <Field>
+                                        <FieldLabel htmlFor="profile_photo">
+                                            Profile Photo
+                                        </FieldLabel>
+                                        <div className="flex items-center gap-4">
+                                            {previewUrl && (
+                                                <img src={previewUrl} alt="Preview" className="w-16 h-16 rounded-full object-cover shadow-sm" />
+                                            )}
+                                            <Input
+                                                id="profile_photo"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handlePhotoChange}
+                                            />
+                                        </div>
+                                        <InputError message={errors.profile_photo} />
                                     </Field>
                                     <Field orientation="horizontal">
                                         <Button

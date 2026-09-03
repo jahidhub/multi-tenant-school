@@ -10,16 +10,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Teacher extends Model
 {
-    use BelongsToTenant;
+    use BelongsToTenant, \Illuminate\Database\Eloquent\SoftDeletes;
 
     use HasFactory;
 
     protected $fillable = [
         'tenant_id',
+        'user_id',
         'name',
+        'email',
         'phone',
-        'subject',
-        'address'
+        'subject_specialty',
+        'address',
+        'joining_date',
+        'status',
+        'profile_photo_path'
     ];
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
 }

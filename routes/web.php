@@ -72,12 +72,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::GET('/edit/teacher/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
     Route::PUT('/teacher/{id}', [TeacherController::class, 'update'])->name('teacher.update');
     Route::delete('/teacher/{id}', [TeacherController::class, 'destroy'])->name('teacher.delete');
+    Route::post('/teacher/{id}/restore', [TeacherController::class, 'restore'])->name('teacher.restore');
+    Route::delete('/teacher/{id}/force', [TeacherController::class, 'forceDestroy'])->name('teacher.force-delete');
 
     Route::get('/students', [StudentController::class, 'index'])->name('student.index');
     Route::post('/student/store', [StudentController::class, 'store'])->name('student.store');
-    Route::get('/students/{id}', [StudentController::class, 'show'])->name('student.show');
-    Route::put('/student/{id}', [StudentController::class, 'update'])->name('student.update');
-    Route::delete('/student/{id}', [StudentController::class, 'destroy'])->name('student.destroy');
+    Route::get('/student/{id}', [StudentController::class, 'show'])->name('student.show');
+    Route::get('/edit/student/{id}', [StudentController::class, 'edit'])->name('student.edit');
+    Route::PUT('/student/{id}', [StudentController::class, 'update'])->name('student.update');
+    Route::delete('/student/{id}', [StudentController::class, 'destroy'])->name('student.delete');
+    Route::post('/student/{id}/restore', [StudentController::class, 'restore'])->name('student.restore');
+    Route::delete('/student/{id}/force', [StudentController::class, 'forceDestroy'])->name('student.force-delete');
+    Route::delete('/students/bulk', [StudentController::class, 'bulkDestroy'])->name('student.bulk-delete');
+    Route::delete('/students/bulk/force', [StudentController::class, 'bulkForceDestroy'])->name('student.bulk-force-delete');
+    Route::post('/students/bulk/restore', [StudentController::class, 'bulkRestore'])->name('student.bulk-restore');
+    Route::get('/students/bulk/export', [StudentController::class, 'bulkExport'])->name('student.bulk-export');
+    Route::post('/students/import', [StudentController::class, 'import'])->name('student.import');
+    Route::post('/students/promote', [StudentController::class, 'promote'])->name('student.promote');
 
     Route::get('/courses', [CourseController::class, 'index'])->name('course.index');
     Route::post('/course/store', [CourseController::class, 'store'])->name('course.store');
