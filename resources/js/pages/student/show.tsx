@@ -1,6 +1,22 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm, router } from '@inertiajs/react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { BookOpen, LogOut } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -21,7 +37,8 @@ import { useState } from 'react';
 
 interface CourseData {
     id: number;
-    course_name: string;
+    name: string;
+    capacity?: number;
 }
 
 interface EnrollmentData {
@@ -81,10 +98,33 @@ interface StudentProps {
     grades: GradeData[];
     invoices: InvoiceData[];
     payments: PaymentData[];
+    courses: any[];
 }
 
-export default function StudentShow({ student, enrollments = [], grades = [], invoices = [], payments = [] }: StudentProps) {
+export default function StudentShow({ student, enrollments = [], grades = [], invoices = [], payments = [], courses = [] }: StudentProps) {
     const [activeTab, setActiveTab] = useState<'profile' | 'grades' | 'billing'>('profile');
+    const [isEnrollOpen, setIsEnrollOpen] = useState(false);
+
+    const { data: enrollData, setData: setEnrollData, post: postEnroll, processing: enrollProcessing, reset: resetEnroll, errors: enrollErrors } = useForm({
+        course_id: '',
+        student_ids: [student.id],
+    });
+
+    const handleEnrollSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        postEnroll('/enrollment/store', {
+            onSuccess: () => {
+                setIsEnrollOpen(false);
+                resetEnroll();
+            }
+        });
+    };
+
+    const withdraw = (enrollmentId: number) => {
+        if(confirm('Are you sure you want to withdraw the student from this course?')) {
+            router.post(`/enrollment/${enrollmentId}/withdraw`);
+        }
+    };
 
     const handleDownloadReceipt = (paymentId: number) => {
         window.open(`/payments/${paymentId}/receipt`, '_blank');
@@ -225,13 +265,19 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
 
                             {/* Enrollments */}
                             <Card className="md:col-span-2">
-                                <CardHeader>Course Enrollments</CardHeader>
+                                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                    <h3 className="font-semibold leading-none tracking-tight">Course Enrollments</h3>
+                                    <Button variant="outline" size="sm" onClick={() => setIsEnrollOpen(true)}>
+                                        <BookOpen className="h-4 w-4 mr-2" /> Enroll
+                                    </Button>
+                                </CardHeader>
                                 <CardContent>
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
                                                 <TableHead>Course Name</TableHead>
                                                 <TableHead>Status</TableHead>
+                                                <TableHead className="text-right">Actions</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -244,14 +290,21 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
                                             ) : (
                                                 enrollments.map((enr) => (
                                                     <TableRow key={enr.id}>
-                                                        <TableCell className="font-semibold">{enr.course?.course_name}</TableCell>
+                                                        <TableCell className="font-semibold">{enr.course?.name}</TableCell>
                                                         <TableCell>
                                                             <span
                                                                 className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold"
-                                                                style={{ backgroundColor: enr.status === 'active' ? '#16a34a' : '#ea580c', color: '#ffffff' }}
+                                                                style={{ backgroundColor: enr.status === 'active' ? '#16a34a' : (enr.status === 'withdrawn' ? '#4b5563' : '#ea580c'), color: '#ffffff' }}
                                                             >
                                                                 {enr.status.toUpperCase()}
                                                             </span>
+                                                        </TableCell>
+                                                        <TableCell className="text-right">
+                                                            {enr.status === 'active' && (
+                                                                <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700" onClick={() => withdraw(enr.id)}>
+                                                                    <LogOut className="h-4 w-4 mr-1" /> Withdraw
+                                                                </Button>
+                                                            )}
                                                         </TableCell>
                                                     </TableRow>
                                                 ))
@@ -286,7 +339,7 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
                                         ) : (
                                             grades.map((grade) => (
                                                 <TableRow key={grade.id}>
-                                                    <TableCell className="font-semibold">{grade.exam?.course?.course_name}</TableCell>
+                                                    <TableCell className="font-semibold">{grade.exam?.course?.name}</TableCell>
                                                     <TableCell>{grade.exam?.name}</TableCell>
                                                     <TableCell className="font-bold text-green-600 dark:text-green-400">
                                                         {grade.marks_obtained} / {grade.exam?.max_marks}
@@ -401,6 +454,49 @@ export default function StudentShow({ student, enrollments = [], grades = [], in
                     )}
                 </div>
             </div>
+
+            {/* Enroll Modal */}
+            <Dialog open={isEnrollOpen} onOpenChange={setIsEnrollOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <form onSubmit={handleEnrollSubmit}>
+                        <DialogHeader>
+                            <DialogTitle>Enroll in Course</DialogTitle>
+                            <DialogDescription>
+                                Select a course to enroll <strong>{student.name}</strong> into.
+                            </DialogDescription>
+                        </DialogHeader>
+                        
+                        <div className="grid gap-4 py-4">
+                            <div className="grid gap-2">
+                                <Select value={enrollData.course_id} onValueChange={(val) => setEnrollData('course_id', val)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Course" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {courses?.length > 0 ? courses.map((course: any) => (
+                                            <SelectItem key={course.id} value={course.id.toString()}>
+                                                {course.name} ({course.code})
+                                            </SelectItem>
+                                        )) : (
+                                            <SelectItem value="none" disabled>No active courses available.</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                </Select>
+                                {enrollErrors.course_id && <div className="text-red-500 text-sm mt-1">{enrollErrors.course_id}</div>}
+                            </div>
+                        </div>
+                        
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setIsEnrollOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button type="submit" disabled={enrollProcessing || !enrollData.course_id}>
+                                Enroll Student
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

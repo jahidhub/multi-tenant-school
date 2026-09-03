@@ -7,16 +7,19 @@ use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Course extends Model
 {
-    use BelongsToTenant;
+    use BelongsToTenant, SoftDeletes;
     protected $with = ['teacher'];
 
-    protected $fillable = [
-        'tenant_id',
-        'teacher_id',
-        'course_name',
-    ];
+    protected $guarded = [];
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 
     public function teachers()
     {

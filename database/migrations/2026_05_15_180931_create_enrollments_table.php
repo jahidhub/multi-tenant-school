@@ -18,8 +18,10 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->date('enrollment_date')->default(DB::raw('(CURDATE())'));
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('status', 50)->default('active'); // active, withdrawn, completed
             $table->timestamps();
+
+            $table->unique(['tenant_id', 'student_id', 'course_id'], 'enrollment_unique');
         });
     }
 

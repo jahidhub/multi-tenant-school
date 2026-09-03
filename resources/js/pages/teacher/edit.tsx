@@ -123,6 +123,7 @@ export default function TeacherEdit({ teacher, id }: Props) {
                                                     e.target.value,
                                                 )
                                             }
+                                            placeholder="e.g. Jane Doe"
                                         />
                                         <InputError
                                             message={errors.name}
@@ -143,6 +144,7 @@ export default function TeacherEdit({ teacher, id }: Props) {
                                                     e.target.value,
                                                 )
                                             }
+                                            placeholder="e.g. +1 234 567 8900"
                                         />
                                         <InputError
                                             message={errors.phone}
@@ -163,6 +165,7 @@ export default function TeacherEdit({ teacher, id }: Props) {
                                                     e.target.value,
                                                 )
                                             }
+                                            placeholder="e.g. Mathematics"
                                         />
                                         <InputError message={errors.subject_specialty} />
                                     </Field>
@@ -181,6 +184,7 @@ export default function TeacherEdit({ teacher, id }: Props) {
                                                     e.target.value,
                                                 )
                                             }
+                                            placeholder="e.g. 123 Main St, City"
                                         />
                                         <InputError message={errors.address} />
                                     </Field>

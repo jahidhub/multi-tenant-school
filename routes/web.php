@@ -90,15 +90,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/students/import', [StudentController::class, 'import'])->name('student.import');
     Route::post('/students/promote', [StudentController::class, 'promote'])->name('student.promote');
 
-    Route::get('/courses', [CourseController::class, 'index'])->name('course.index');
-    Route::post('/course/store', [CourseController::class, 'store'])->name('course.store');
-    Route::put('/course/{id}', [CourseController::class, 'update'])->name('course.update');
-    Route::delete('/course/{id}', [CourseController::class, 'destroy'])->name('course.destroy');
+    Route::get('/courses', [App\Http\Controllers\CourseController::class, 'index'])->name('course.index');
+    Route::post('/courses', [App\Http\Controllers\CourseController::class, 'store'])->name('course.store');
+    Route::put('/course/{id}', [App\Http\Controllers\CourseController::class, 'update'])->name('course.update');
+    Route::delete('/course/{id}', [App\Http\Controllers\CourseController::class, 'destroy'])->name('course.destroy');
+    Route::post('/course/{id}/restore', [App\Http\Controllers\CourseController::class, 'restore'])->name('course.restore');
+    Route::delete('/course/{id}/force', [App\Http\Controllers\CourseController::class, 'forceDestroy'])->name('course.force-delete');
+    Route::post('/course/{id}/duplicate', [App\Http\Controllers\CourseController::class, 'duplicate'])->name('course.duplicate');
 
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollment.index');
     Route::post('/enrollment/store', [EnrollmentController::class, 'store'])->name('enrollment.store');
     Route::put('/enrollment/{id}', [EnrollmentController::class, 'update'])->name('enrollment.update');
     Route::delete('/enrollment/{id}', [EnrollmentController::class, 'destroy'])->name('enrollment.destroy');
+    Route::post('/enrollment/{id}/withdraw', [EnrollmentController::class, 'withdraw'])->name('enrollment.withdraw');
 
     Route::get('/exams', [ExamController::class, 'index'])->name('exam.index');
     Route::post('/exam/store', [ExamController::class, 'store'])->name('exam.store');

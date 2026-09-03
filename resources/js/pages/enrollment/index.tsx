@@ -53,7 +53,7 @@ interface StudentData {
 
 interface CourseData {
     id: number;
-    course_name: string;
+    name: string;
 }
 
 interface EnrollmentData {
@@ -211,7 +211,7 @@ export default function Enrollment({ enrollments, students = [], courses = [] }:
                                                     {enrollment.student ? enrollment.student.name : <span className="text-muted-foreground italic">No Student</span>}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {enrollment.course ? enrollment.course.course_name : <span className="text-muted-foreground italic">No Course</span>}
+                                                    {enrollment.course ? enrollment.course.name : <span className="text-muted-foreground italic">No Course</span>}
                                                 </TableCell>
                                                 <TableCell>
                                                     {enrollment.enrollment_date}
@@ -315,7 +315,7 @@ export default function Enrollment({ enrollments, students = [], courses = [] }:
                                     <SelectContent>
                                         {courses.map((course) => (
                                             <SelectItem key={course.id} value={course.id.toString()}>
-                                                {course.course_name}
+                                                {course.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

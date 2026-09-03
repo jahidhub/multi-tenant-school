@@ -1,5 +1,5 @@
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { Ellipsis, Search, Upload, TrendingUp } from 'lucide-react';
+import { Ellipsis, Search, Upload, TrendingUp, Download } from 'lucide-react';
 import { useState } from 'react';
 import {
     Breadcrumb,
@@ -269,6 +269,11 @@ export default function Student({ students = { data: [], links: [] }, filters = 
         });
     };
 
+    const handleBulkExport = () => {
+        window.location.href = `/students/bulk/export?ids=${selectedIds.join(',')}`;
+        setSelectedIds([]);
+    };
+
     const applyFilters = () => {
         router.get('/students', { search, class: classFilter }, { preserveState: true });
     };
@@ -299,6 +304,9 @@ export default function Student({ students = { data: [], links: [] }, filters = 
                             <>
                                 <Button variant="outline" onClick={openPromoteModal}>
                                     <TrendingUp className="mr-2 h-4 w-4" /> Promote ({selectedIds.length})
+                                </Button>
+                                <Button variant="outline" onClick={handleBulkExport}>
+                                    <Download className="mr-2 h-4 w-4" /> Export ({selectedIds.length})
                                 </Button>
                                 <Button variant="outline" onClick={() => setIsBulkRestoreOpen(true)}>
                                     Restore ({selectedIds.length})

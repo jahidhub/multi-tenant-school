@@ -115,12 +115,17 @@ class StudentController extends Controller
             ->latest()
             ->get();
 
+        $courses = \App\Models\Course::where('tenant_id', $tenant_id)
+            ->where('status', 'active')
+            ->get(['id', 'name', 'code', 'capacity']);
+
         return Inertia::render('student/show', [
             'student' => $student,
             'enrollments' => $enrollments,
             'grades' => $grades,
             'invoices' => $invoices,
             'payments' => $payments,
+            'courses' => $courses,
         ]);
     }
 
@@ -311,6 +316,11 @@ class StudentController extends Controller
         $file = $request->file('file');
         $handle = fopen($file->getPathname(), "r");
         $header = fgetcsv($handle, 1000, ","); // Assumes first row is header
+        if ($header) {
+            $header = array_map(function($h) {
+                return strtolower(str_replace(' ', '_', trim($h)));
+            }, $header);
+        }
 
         $tenant_id = Auth::user()->tenant_id;
         $year = date('Y');

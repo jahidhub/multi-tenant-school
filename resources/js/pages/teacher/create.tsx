@@ -106,7 +106,7 @@ export default function TeacherCreate() {
                                                     e.target.value,
                                                 )
                                             }
-                                            
+                                            placeholder="e.g. Jane Doe"
                                         />
                                         <InputError message={errors.name} />
                                     </Field>
@@ -125,7 +125,7 @@ export default function TeacherCreate() {
                                                     e.target.value,
                                                 )
                                             }
-                                           
+                                            placeholder="e.g. +1 234 567 8900"
                                         />
                                         <InputError message={errors.phone} />
                                     </Field>
@@ -143,7 +143,7 @@ export default function TeacherCreate() {
                                                     e.target.value,
                                                 )
                                             }
-                                           
+                                            placeholder="e.g. Mathematics"
                                         />
                                         <InputError message={errors.subject_specialty} />
                                     </Field>
@@ -161,6 +161,7 @@ export default function TeacherCreate() {
                                                     e.target.value,
                                                 )
                                             }
+                                            placeholder="e.g. 123 Main St, City"
                                         />
                                         <InputError message={errors.address} />
                                     </Field>

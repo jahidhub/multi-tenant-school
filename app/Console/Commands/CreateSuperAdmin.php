@@ -18,14 +18,14 @@ class CreateSuperAdmin extends Command
      */
     public function handle()
     {
-        $email = $this->ask('Email');
-        $password = $this->ask('Password');
+        // $email = $this->ask('Email');
+        // $password = $this->ask('Password');
         
         User::updateOrCreate(
-            ['email' => $email],
+            ['email' => 'super@test.com'],
             [
                 'name' => 'Super Admin',
-                'password' => Hash::make($password),
+                'password' => Hash::make('616726'),
                 'role' => 'super-admin', 
                 'tenant_id' => null,
             ]

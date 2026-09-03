@@ -1,4 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +14,8 @@ import {
 } from "@/components/ui/select";
 
 export default function Create() {
+    const [showPassword, setShowPassword] = useState(false);
+    
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         slug: '',
@@ -48,6 +52,7 @@ export default function Create() {
                                             value={data.name} 
                                             onChange={e => setData('name', e.target.value)} 
                                             required 
+                                            placeholder="e.g. Springfield Elementary"
                                         />
                                         {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
                                     </div>
@@ -73,6 +78,7 @@ export default function Create() {
                                             id="slug" 
                                             value={data.slug} 
                                             onChange={e => setData('slug', e.target.value)} 
+                                            placeholder="e.g. springfield"
                                         />
                                         {errors.slug && <div className="text-red-500 text-sm mt-1">{errors.slug}</div>}
                                     </div>
@@ -82,6 +88,7 @@ export default function Create() {
                                             id="domain" 
                                             value={data.domain} 
                                             onChange={e => setData('domain', e.target.value)} 
+                                            placeholder="e.g. springfield.edu"
                                         />
                                         {errors.domain && <div className="text-red-500 text-sm mt-1">{errors.domain}</div>}
                                     </div>
@@ -97,6 +104,7 @@ export default function Create() {
                                         value={data.admin_name} 
                                         onChange={e => setData('admin_name', e.target.value)} 
                                         required 
+                                        placeholder="e.g. Principal Skinner"
                                     />
                                     {errors.admin_name && <div className="text-red-500 text-sm mt-1">{errors.admin_name}</div>}
                                 </div>
@@ -109,19 +117,31 @@ export default function Create() {
                                             value={data.admin_email} 
                                             onChange={e => setData('admin_email', e.target.value)} 
                                             required 
+                                            placeholder="e.g. admin@springfield.edu"
                                         />
                                         {errors.admin_email && <div className="text-red-500 text-sm mt-1">{errors.admin_email}</div>}
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="admin_password">Admin Password</Label>
-                                        <Input 
-                                            id="admin_password" 
-                                            type="password"
-                                            value={data.admin_password} 
-                                            onChange={e => setData('admin_password', e.target.value)} 
-                                            required 
-                                            minLength={8}
-                                        />
+                                        <div className="relative">
+                                            <Input 
+                                                id="admin_password" 
+                                                type={showPassword ? "text" : "password"}
+                                                value={data.admin_password} 
+                                                onChange={e => setData('admin_password', e.target.value)} 
+                                                required 
+                                                minLength={8}
+                                                placeholder="e.g. SecurePassword123!"
+                                                className="pr-10"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                                            >
+                                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                            </button>
+                                        </div>
                                         {errors.admin_password && <div className="text-red-500 text-sm mt-1">{errors.admin_password}</div>}
                                     </div>
                                 </div>
