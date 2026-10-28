@@ -24,7 +24,9 @@ export default function AuthSimpleLayout({
                 <div className="absolute -bottom-24 -left-24 size-96 rounded-full bg-secondary/10 blur-3xl" />
 
                 <Link href="/" className="relative z-10 flex items-center">
-                    <AppLogoIcon className="h-8 w-auto sm:h-12" />
+                    <div className="flex items-center justify-center rounded-lg bg-white p-2">
+                        <AppLogoIcon className="h-8 w-auto sm:h-12" />
+                    </div>
                 </Link>
 
                 <div className="relative z-10 space-y-6">
@@ -55,7 +57,9 @@ export default function AuthSimpleLayout({
                 <div className="w-full max-w-md space-y-6">
                     <div className="flex flex-col items-center gap-3 lg:hidden">
                         <Link href="/" className="flex items-center">
-                            <AppLogoIcon className="h-8 w-auto sm:h-12" />
+                            <div className="flex items-center justify-center rounded-lg bg-white p-2">
+                        <AppLogoIcon className="h-8 w-auto sm:h-12" />
+                    </div>
                         </Link>
                     </div>
 
