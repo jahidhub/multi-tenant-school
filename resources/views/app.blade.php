@@ -3,6 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="One Platform. Every School. Manage students, teachers, courses, attendance, exams, fees, and report cards.">
+        <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
+        <meta property="og:description" content="One Platform. Every School.">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="/og-image.png">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/og-image.png">
 
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
         <script>
@@ -30,9 +37,9 @@
             }
         </style>
 
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico?v=2" sizes="any">
+        <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 
         @fonts
 
