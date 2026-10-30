@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
-import { ShieldAlert } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { AlertTriangle, ShieldAlert, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
@@ -10,8 +11,32 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function Index({ tenants }: any) {
+    const [selectedTenant, setSelectedTenant] = useState<any>(null);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = () => {
+        if (!selectedTenant) return;
+        setIsDeleting(true);
+        router.delete(`/admin/tenants/${selectedTenant.id}`, {
+            onFinish: () => {
+                setIsDeleting(false);
+                setIsDeleteOpen(false);
+                setSelectedTenant(null);
+            },
+        });
+    };
+
     return (
         <>
             <Head title="Tenants" />
@@ -49,22 +74,43 @@ export default function Index({ tenants }: any) {
                                         <TableCell>{tenant.domain || tenant.slug}</TableCell>
                                         <TableCell className="capitalize">{tenant.plan}</TableCell>
                                         <TableCell className="capitalize">
-                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${tenant.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                            <span className={`px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${tenant.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300'}`}>
                                                 {tenant.status}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="text-right flex justify-end gap-3 items-center">
-                                            <Button asChild size="sm" variant="outline" className="h-8 gap-1.5 text-xs font-medium border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 dark:border-blue-900 dark:text-blue-400 dark:hover:bg-blue-950/50">
-                                                <Link 
-                                                    href={`/admin/tenants/${tenant.id}/impersonate`} 
-                                                    method="post" 
-                                                    as="button"
-                                                >
+                                        <TableCell className="text-right flex justify-end gap-2 items-center">
+                                            {tenant.status === 'active' ? (
+                                                <Button asChild size="sm" variant="outline" className="h-8 gap-1.5 text-xs font-medium border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 dark:border-blue-900 dark:text-blue-400 dark:hover:bg-blue-950/50">
+                                                    <Link 
+                                                        href={`/admin/tenants/${tenant.id}/impersonate`} 
+                                                        method="post" 
+                                                        as="button"
+                                                    >
+                                                        <ShieldAlert className="h-3 w-3" />
+                                                        Login as School
+                                                    </Link>
+                                                </Button>
+                                            ) : (
+                                                <Button size="sm" variant="outline" disabled className="h-8 gap-1.5 text-xs font-medium opacity-50 cursor-not-allowed text-muted-foreground" title="Cannot enter a suspended school">
                                                     <ShieldAlert className="h-3 w-3" />
-                                                    Login as School
-                                                </Link>
+                                                    Suspended
+                                                </Button>
+                                            )}
+                                            <Button asChild size="sm" variant="outline" className="h-8 text-xs font-medium">
+                                                <Link href={`/admin/tenants/${tenant.id}/edit`}>Edit</Link>
                                             </Button>
-                                            <Link href={`/admin/tenants/${tenant.id}/edit`} className="text-indigo-600 hover:text-indigo-900 font-medium text-sm">Edit</Link>
+                                            <Button 
+                                                size="sm" 
+                                                variant="destructive" 
+                                                className="h-8 text-xs font-medium gap-1"
+                                                onClick={() => {
+                                                    setSelectedTenant(tenant);
+                                                    setIsDeleteOpen(true);
+                                                }}
+                                            >
+                                                <Trash2 className="h-3.5 w-3.5" />
+                                                Delete
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -80,6 +126,31 @@ export default function Index({ tenants }: any) {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Delete Confirmation Modal */}
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent className="sm:max-w-[440px]">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-destructive">
+                            <AlertTriangle className="h-5 w-5" />
+                            Delete School
+                        </DialogTitle>
+                        <DialogDescription className="pt-2 text-foreground">
+                            Are you sure you want to permanently delete <strong className="text-destructive font-semibold">{selectedTenant?.name}</strong>?
+                            <br /><br />
+                            <span className="text-sm text-muted-foreground">
+                                This action cannot be undone. All associated records including administrator accounts, students, faculty, courses, enrollments, exams, and invoices will be permanently erased.
+                            </span>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+                        <Button type="button" variant="destructive" disabled={isDeleting} onClick={handleDelete}>
+                            {isDeleting ? 'Deleting...' : 'Delete Permanently'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

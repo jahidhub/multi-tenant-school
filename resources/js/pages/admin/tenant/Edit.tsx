@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,10 +11,21 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Eye, EyeOff } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { AlertTriangle, Eye, EyeOff, Trash2 } from 'lucide-react';
 
 export default function Edit({ tenant, adminUser }: any) {
     const [showPassword, setShowPassword] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const { data, setData, put, processing, errors, recentlySuccessful } = useForm({
         name: tenant.name,
         slug: tenant.slug,
@@ -31,10 +42,20 @@ export default function Edit({ tenant, adminUser }: any) {
         put(`/admin/tenants/${tenant.id}`);
     };
 
+    const handleDelete = () => {
+        setIsDeleting(true);
+        router.delete(`/admin/tenants/${tenant.id}`, {
+            onFinish: () => {
+                setIsDeleting(false);
+                setIsDeleteOpen(false);
+            },
+        });
+    };
+
     return (
         <>
             <Head title={`Edit ${tenant.name}`} />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Edit {tenant.name}</CardTitle>
@@ -170,7 +191,59 @@ export default function Edit({ tenant, adminUser }: any) {
                         </form>
                     </CardContent>
                 </Card>
+
+                {/* Danger Zone */}
+                <Card className="border-destructive/30">
+                    <CardHeader>
+                        <CardTitle className="text-destructive flex items-center gap-2">
+                            <AlertTriangle className="h-5 w-5" />
+                            Danger Zone
+                        </CardTitle>
+                        <CardDescription>
+                            Permanently delete this school and all of its associated records from the system.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <p className="text-sm font-medium text-foreground">Delete this School</p>
+                            <p className="text-xs text-muted-foreground">Once deleted, all students, staff, exams, courses, and financial records cannot be recovered.</p>
+                        </div>
+                        <Button 
+                            type="button" 
+                            variant="destructive"
+                            onClick={() => setIsDeleteOpen(true)}
+                        >
+                            <Trash2 className="h-4 w-4 mr-1.5" />
+                            Delete School
+                        </Button>
+                    </CardContent>
+                </Card>
             </div>
+
+            {/* Delete Confirmation Modal */}
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent className="sm:max-w-[440px]">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-destructive">
+                            <AlertTriangle className="h-5 w-5" />
+                            Delete School
+                        </DialogTitle>
+                        <DialogDescription className="pt-2 text-foreground">
+                            Are you sure you want to permanently delete <strong className="text-destructive font-semibold">{tenant.name}</strong>?
+                            <br /><br />
+                            <span className="text-sm text-muted-foreground">
+                                This action cannot be undone. All associated records including administrator accounts, students, faculty, courses, enrollments, exams, and invoices will be permanently erased.
+                            </span>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+                        <Button type="button" variant="destructive" disabled={isDeleting} onClick={handleDelete}>
+                            {isDeleting ? 'Deleting...' : 'Delete Permanently'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

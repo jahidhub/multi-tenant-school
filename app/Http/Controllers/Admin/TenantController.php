@@ -131,8 +131,38 @@ class TenantController extends Controller
         return back()->with('success', 'School updated successfully.');
     }
 
+    public function destroy(Tenant $tenant)
+    {
+        $originalUserId = session()->get('impersonate.original_user_id');
+        if ($originalUserId && auth()->user()->tenant_id === $tenant->id) {
+            return back()->with([
+                'type' => 'error',
+                'message' => 'Cannot delete a school while impersonating it. Please leave impersonation first.',
+            ]);
+        }
+
+        $tenantName = $tenant->name;
+
+        DB::transaction(function () use ($tenant) {
+            activity()->causedBy(auth()->user())->log("Deleted school: {$tenant->name} (ID: {$tenant->id})");
+            $tenant->delete();
+        });
+
+        return redirect()->route('admin.tenants.index')->with([
+            'type' => 'success',
+            'message' => "School '{$tenantName}' and all associated records were permanently deleted.",
+        ]);
+    }
+
     public function impersonate(Tenant $tenant)
     {
+        if ($tenant->status === 'suspended') {
+            return back()->with([
+                'type' => 'error',
+                'message' => 'Cannot enter a suspended school account. Please activate it first in school settings.',
+            ]);
+        }
+
         $adminUser = User::query()->where('tenant_id', '=', $tenant->id)->first();
         if ($adminUser) {
             $superAdminId = \Illuminate\Support\Facades\Auth::id();
