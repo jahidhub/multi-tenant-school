@@ -18,8 +18,8 @@ export default function AuthSimpleLayout({
     return (
         <div className="grid min-h-svh lg:grid-cols-2">
             {/* Brand panel */}
-            <div className="relative hidden flex-col justify-between overflow-hidden bg-primary p-10 text-primary-foreground lg:flex">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B1F3A] to-[#050F1F]" />
+            <div className="relative hidden flex-col justify-between overflow-hidden bg-[#0B1F3A] p-10 text-white lg:flex">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0B1F3A] via-[#0B1F3A] to-[#050F1F]" />
                 <div className="absolute -top-24 -right-24 size-96 rounded-full bg-accent/20 blur-3xl" />
                 <div className="absolute -bottom-24 -left-24 size-96 rounded-full bg-secondary/10 blur-3xl" />
 
