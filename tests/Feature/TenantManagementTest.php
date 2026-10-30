@@ -28,7 +28,7 @@ class TenantManagementTest extends TestCase
 
         $response = $this->actingAs($superAdmin)
             ->post('/admin/tenants', [
-                'name' => 'Greenwood High',
+                'institute_name' => 'Greenwood High',
                 'slug' => 'greenwood-high',
                 'plan' => 'premium',
             ]);
@@ -36,9 +36,10 @@ class TenantManagementTest extends TestCase
         $response->assertRedirect('/admin/tenants');
         
         $this->assertDatabaseHas('tenants', [
-            'name' => 'Greenwood High',
+            'institute_name' => 'Greenwood High',
             'slug' => 'greenwood-high',
             'plan' => 'premium',
         ]);
     }
 }
+

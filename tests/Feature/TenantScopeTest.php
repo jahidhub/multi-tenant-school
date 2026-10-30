@@ -14,8 +14,8 @@ class TenantScopeTest extends TestCase
 
     public function test_tenant_user_can_only_see_their_own_tenant_records()
     {
-        $tenant1 = Tenant::create(['name' => 'Tenant 1', 'slug' => 'tenant-1', 'plan' => 'basic']);
-        $tenant2 = Tenant::create(['name' => 'Tenant 2', 'slug' => 'tenant-2', 'plan' => 'basic']);
+        $tenant1 = Tenant::create(['institute_name' => 'Tenant 1', 'slug' => 'tenant-1', 'plan' => 'basic']);
+        $tenant2 = Tenant::create(['institute_name' => 'Tenant 2', 'slug' => 'tenant-2', 'plan' => 'basic']);
 
         // Since we mock tenant resolution by acting as a user:
         $user1 = User::factory()->create(['tenant_id' => $tenant1->id]);
@@ -40,3 +40,4 @@ class TenantScopeTest extends TestCase
         $this->assertEquals('Student One', $students->first()->name);
     }
 }
+
