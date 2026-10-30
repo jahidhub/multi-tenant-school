@@ -18,6 +18,7 @@ class CreateSuperAdmin extends Command
      */
     public function handle()
     {
+        // php artisan create:super-admin
         // $email = $this->ask('Email');
         // $password = $this->ask('Password');
         
