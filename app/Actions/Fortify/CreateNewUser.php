@@ -37,7 +37,6 @@ class CreateNewUser implements CreatesNewUsers
 
         return DB::transaction(function () use ($input) {
             $slug = Str::slug($input['school_name']);
-            // Make slug unique if it already exists
             $originalSlug = $slug;
             $counter = 1;
             while (Tenant::where('slug', $slug)->exists()) {
@@ -52,7 +51,6 @@ class CreateNewUser implements CreatesNewUsers
                 'status' => 'active',
             ]);
 
-            // Seed default grading scales for this new tenant
             $defaults = [
                 ['grade' => 'A+', 'min_percentage' => 80, 'max_percentage' => 100, 'gpa_point' => 5.00],
                 ['grade' => 'A', 'min_percentage' => 70, 'max_percentage' => 79, 'gpa_point' => 4.00],
