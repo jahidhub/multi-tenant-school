@@ -23,7 +23,7 @@ class RolePermissionTest extends TestCase
 
     public function test_teacher_can_view_students_but_not_delete()
     {
-        $tenant = Tenant::create(['name' => 'Test School', 'slug' => 'test-school', 'plan' => 'basic']);
+        $tenant = Tenant::create(['institute_name' => 'Test School', 'slug' => 'test-school', 'plan' => 'basic']);
         
         $teacher = User::factory()->create(['tenant_id' => $tenant->id]);
         
@@ -33,6 +33,7 @@ class RolePermissionTest extends TestCase
         $student = Student::create([
             'tenant_id' => $tenant->id,
             'name' => 'John Doe',
+            'admission_no' => 'JD-001',
             'class' => '10A',
             'roll_number' => '1',
         ]);
@@ -51,11 +52,12 @@ class RolePermissionTest extends TestCase
     {
         $superAdmin = User::factory()->create(['role' => 'super-admin']);
 
-        $tenant = Tenant::create(['name' => 'Test School', 'slug' => 'test-school', 'plan' => 'basic']);
+        $tenant = Tenant::create(['institute_name' => 'Test School', 'slug' => 'test-school', 'plan' => 'basic']);
         
         $student = Student::create([
             'tenant_id' => $tenant->id,
             'name' => 'Jane Doe',
+            'admission_no' => 'JN-001',
             'class' => '10A',
         ]);
 
@@ -64,3 +66,5 @@ class RolePermissionTest extends TestCase
         $this->assertTrue($superAdmin->can('delete', $student));
     }
 }
+
+

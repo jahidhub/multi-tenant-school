@@ -28,9 +28,12 @@ class TenantManagementTest extends TestCase
 
         $response = $this->actingAs($superAdmin)
             ->post('/admin/tenants', [
-                'institute_name' => 'Greenwood High',
+                'name' => 'Greenwood High',
                 'slug' => 'greenwood-high',
                 'plan' => 'premium',
+                'admin_name' => 'Admin User',
+                'admin_email' => 'admin@greenwood.test',
+                'admin_password' => 'password123',
             ]);
 
         $response->assertRedirect('/admin/tenants');
@@ -42,4 +45,5 @@ class TenantManagementTest extends TestCase
         ]);
     }
 }
+
 

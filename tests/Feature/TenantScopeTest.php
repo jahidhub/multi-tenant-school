@@ -24,11 +24,11 @@ class TenantScopeTest extends TestCase
         // Mock the resolved tenant in the container as the middleware would do
         app()->instance('tenant', $tenant1);
 
-        Student::create(['tenant_id' => $tenant1->id, 'name' => 'Student One', 'class' => '10A', 'roll_number' => 'A001', 'date_of_birth' => '2010-01-01', 'gender' => 'Male']);
+        Student::create(['tenant_id' => $tenant1->id, 'name' => 'Student One', 'admission_no' => 'A001', 'class' => '10A', 'roll_number' => 'A001', 'dob' => '2010-01-01', 'gender' => 'Male']);
         
         // Temporarily clear tenant scope to create another tenant's record, or just create without scope using DB facade
         app()->forgetInstance('tenant');
-        Student::create(['tenant_id' => $tenant2->id, 'name' => 'Student Two', 'class' => '10B', 'roll_number' => 'A002', 'date_of_birth' => '2010-01-01', 'gender' => 'Male']);
+        Student::create(['tenant_id' => $tenant2->id, 'name' => 'Student Two', 'admission_no' => 'A002', 'class' => '10B', 'roll_number' => 'A002', 'dob' => '2010-01-01', 'gender' => 'Male']);
 
         // Authenticate User 1, bind tenant1
         $this->actingAs($user1);
@@ -40,4 +40,6 @@ class TenantScopeTest extends TestCase
         $this->assertEquals('Student One', $students->first()->name);
     }
 }
+
+
 

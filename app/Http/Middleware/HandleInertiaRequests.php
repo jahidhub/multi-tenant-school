@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -13,6 +12,14 @@ class HandleInertiaRequests extends Middleware
     public function version(Request $request): ?string
     {
         return parent::version($request);
+    }
+
+    protected function title(Request $request, ?string $title): string
+    {
+        $tenant = app()->bound('tenant') ? app('tenant') : null;
+        $name = $tenant?->institute_name ?? config('app.name');
+
+        return $title ? "{$title} - {$name}" : $name;
     }
 
     public function share(Request $request): array
