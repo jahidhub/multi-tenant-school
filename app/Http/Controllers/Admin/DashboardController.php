@@ -28,7 +28,7 @@ class DashboardController extends Controller
             $admin = $tenant->adminUser;
             return [
                 'id' => $tenant->id,
-                'name' => $tenant->name,
+                'name' => $tenant->institute_name,
                 'slug' => $tenant->slug,
                 'plan' => $tenant->plan,
                 'plan_cap' => $tenant->plan_cap,

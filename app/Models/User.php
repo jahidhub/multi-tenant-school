@@ -17,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
-#[Fillable(['name', 'email', 'password', 'tenant_id', 'role'])]
+#[Fillable(['name', 'email', 'password', 'tenant_id', 'role', 'status', 'approved_by', 'approved_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -46,6 +46,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'approved_at' => 'datetime',
         ];
     }
 }

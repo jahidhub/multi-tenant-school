@@ -27,19 +27,19 @@ export default function Register({ passwordRules }: Props) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="school_name">School Name</Label>
+                                <Label htmlFor="Institute_name">Institute Name</Label>
                                 <Input
-                                    id="school_name"
+                                    id="Institute_name"
                                     type="text"
                                     required
                                     autoFocus
                                     tabIndex={1}
-                                    name="school_name"
+                                    name="Institute_name"
                                     autoComplete="organization"
-                                    placeholder="Your School Name"
+                                    placeholder="Your Institute Name"
                                 />
                                 <InputError
-                                    message={errors.school_name}
+                                    message={errors.Institute_name}
                                     className="mt-2"
                                 />
                             </div>
@@ -135,3 +135,4 @@ Register.layout = {
     title: 'Create an account',
     description: 'Enter your details below to create your account',
 };
+

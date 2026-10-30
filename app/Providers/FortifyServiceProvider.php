@@ -25,7 +25,10 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\RegisterResponse::class,
+            \App\Http\Responses\RegisterResponse::class
+        );
     }
 
     /**
@@ -54,9 +57,22 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureAuthentication(): void
     {
         Fortify::authenticateUsing(function (Request $request) {
+            // If no super admin exists, lock down the whole app
+            if (!User::withoutGlobalScopes()->where('role', 'super-admin')->exists()) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => [__('The application is not configured yet. Please contact the administrator.')],
+                ]);
+            }
+
             $user = User::withoutGlobalScopes()->where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
+                if ($user->status !== 'active') {
+                    throw ValidationException::withMessages([
+                        Fortify::username() => [__('Your account is awaiting approval by an administrator.')],
+                    ]);
+                }
+
                 if ($user->tenant_id) {
                     $tenant = Tenant::find($user->tenant_id);
 

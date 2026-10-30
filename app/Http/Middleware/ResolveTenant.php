@@ -9,18 +9,14 @@ use App\Models\Tenant;
 
 class ResolveTenant
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
+        $tenant = null;
+
         if (auth()->check() && auth()->user()->tenant_id) {
             $tenant = Tenant::find(auth()->user()->tenant_id);
             $isImpersonating = session()->has('impersonate.original_user_id');
 
-            // If tenant was deleted or is suspended (and not currently impersonated by super-admin)
             if (!$tenant || ($tenant->status === 'suspended' && !$isImpersonating)) {
                 $message = !$tenant
                     ? 'This school account is no longer available.'
@@ -37,13 +33,42 @@ class ResolveTenant
                     'message' => $message,
                 ]);
             }
+        } else {
+            $tenant = $this->resolveByHost($request);
+        }
 
-            if ($tenant) {
-                app()->instance('tenant', $tenant);
-                setPermissionsTeamId($tenant->id);
-            }
+        if ($tenant) {
+            app()->instance('tenant', $tenant);
+            setPermissionsTeamId($tenant->id);
         }
 
         return $next($request);
+    }
+
+    protected function resolveByHost(Request $request): ?Tenant
+    {
+        $host = $request->getHost();
+
+        $tenant = Tenant::where('domain', $host)->first();
+        if ($tenant) {
+            return $tenant;
+        }
+
+        $parts = explode('.', $host);
+        if (count($parts) >= 3) {
+            $slug = $parts[0];
+            if ($slug !== 'www') {
+                $tenant = Tenant::where('slug', $slug)->first();
+                if ($tenant) {
+                    return $tenant;
+                }
+            }
+        }
+
+        if (app()->isLocal() && $request->has('tenant')) {
+            return Tenant::where('slug', $request->query('tenant'))->first();
+        }
+
+        return null;
     }
 }

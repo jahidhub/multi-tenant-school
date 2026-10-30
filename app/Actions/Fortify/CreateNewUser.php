@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -28,6 +29,12 @@ class CreateNewUser implements CreatesNewUsers
             'school_name' => ['required', 'string', 'max:100'],
         ])->validate();
 
+        if (!User::withoutGlobalScopes()->where('role', 'super-admin')->exists()) {
+            throw ValidationException::withMessages([
+                'email' => [__('Registration is disabled until a super administrator is configured.')],
+            ]);
+        }
+
         return DB::transaction(function () use ($input) {
             $slug = Str::slug($input['school_name']);
             // Make slug unique if it already exists
@@ -39,7 +46,8 @@ class CreateNewUser implements CreatesNewUsers
             }
 
             $tenant = Tenant::create([
-                'name' => $input['school_name'],
+                'institute_name' => $input['school_name'],
+                'owner_name' => $input['name'],
                 'slug' => $slug,
                 'status' => 'active',
             ]);
@@ -66,6 +74,7 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => $input['password'],
                 'tenant_id' => $tenant->id,
                 'role' => 'school-admin',
+                'status' => 'pending',
             ]);
         });
     }

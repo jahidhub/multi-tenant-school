@@ -20,40 +20,40 @@ interface TenantData {
 
 export default function TenantSettings({ tenant }: { tenant: TenantData }) {
     const { data, setData, patch, processing, errors, recentlySuccessful } = useForm({
-        name: tenant.name || '',
+        name: tenant.institute_name || '',
         address: tenant.address || '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch('/settings/school', {
+        patch('/settings/Institute', {
             preserveScroll: true,
         });
     };
 
     return (
         <>
-            <Head title="School settings" />
+            <Head title="Institute settings" />
 
-            <h1 className="sr-only">School settings</h1>
+            <h1 className="sr-only">Institute settings</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="School information"
-                    description="Update your school profile details"
+                    title="Institute information"
+                    description="Update your Institute profile details"
                 />
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">School Name</Label>
+                        <Label htmlFor="name">Institute Name</Label>
                         <Input
                             id="name"
                             className="mt-1 block w-full"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
                             required
-                            placeholder="School name"
+                            placeholder="Institute name"
                         />
                         <InputError message={errors.name} className="mt-2" />
                     </div>
@@ -65,7 +65,7 @@ export default function TenantSettings({ tenant }: { tenant: TenantData }) {
                             className="mt-1 block w-full"
                             value={data.address}
                             onChange={(e) => setData('address', e.target.value)}
-                            placeholder="School address"
+                            placeholder="Institute address"
                         />
                         <InputError message={errors.address} className="mt-2" />
                     </div>
@@ -87,8 +87,9 @@ export default function TenantSettings({ tenant }: { tenant: TenantData }) {
 TenantSettings.layout = {
     breadcrumbs: [
         {
-            title: 'School settings',
-            href: '/settings/school',
+            title: 'Institute settings',
+            href: '/settings/Institute',
         },
     ],
 };
+

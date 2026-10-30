@@ -27,7 +27,7 @@ export default function Edit({ tenant, adminUser }: any) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const { data, setData, put, processing, errors, recentlySuccessful } = useForm({
-        name: tenant.name,
+        name: tenant.institute_name,
         slug: tenant.slug,
         domain: tenant.domain || '',
         plan: tenant.plan,
@@ -54,20 +54,20 @@ export default function Edit({ tenant, adminUser }: any) {
 
     return (
         <>
-            <Head title={`Edit ${tenant.name}`} />
+            <Head title={`Edit ${tenant.institute_name}`} />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Edit {tenant.name}</CardTitle>
-                        <CardDescription>Update the details and status of this school and its administrator.</CardDescription>
+                        <CardTitle>Edit {tenant.institute_name}</CardTitle>
+                        <CardDescription>Update the details and status of this Institute and its administrator.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={submit} className="space-y-6">
                             <div className="space-y-4">
-                                <h3 className="text-lg font-medium">School Details</h3>
+                                <h3 className="text-lg font-medium">Institute Details</h3>
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <div className="grid gap-2">
-                                        <Label htmlFor="name">School Name</Label>
+                                        <Label htmlFor="name">Institute Name</Label>
                                         <Input 
                                             id="name" 
                                             value={data.name} 
@@ -182,10 +182,10 @@ export default function Edit({ tenant, adminUser }: any) {
 
                             <div className="pt-2 flex items-center gap-4">
                                 <Button type="submit" disabled={processing}>
-                                    Update School
+                                    Update Institute
                                 </Button>
                                 {recentlySuccessful && (
-                                    <p className="text-sm font-medium text-green-600 dark:text-green-400">School updated successfully.</p>
+                                    <p className="text-sm font-medium text-green-600 dark:text-green-400">Institute updated successfully.</p>
                                 )}
                             </div>
                         </form>
@@ -200,12 +200,12 @@ export default function Edit({ tenant, adminUser }: any) {
                             Danger Zone
                         </CardTitle>
                         <CardDescription>
-                            Permanently delete this school and all of its associated records from the system.
+                            Permanently delete this Institute and all of its associated records from the system.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <p className="text-sm font-medium text-foreground">Delete this School</p>
+                            <p className="text-sm font-medium text-foreground">Delete this Institute</p>
                             <p className="text-xs text-muted-foreground">Once deleted, all students, staff, exams, courses, and financial records cannot be recovered.</p>
                         </div>
                         <Button 
@@ -214,7 +214,7 @@ export default function Edit({ tenant, adminUser }: any) {
                             onClick={() => setIsDeleteOpen(true)}
                         >
                             <Trash2 className="h-4 w-4 mr-1.5" />
-                            Delete School
+                            Delete Institute
                         </Button>
                     </CardContent>
                 </Card>
@@ -226,10 +226,10 @@ export default function Edit({ tenant, adminUser }: any) {
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-destructive">
                             <AlertTriangle className="h-5 w-5" />
-                            Delete School
+                            Delete Institute
                         </DialogTitle>
                         <DialogDescription className="pt-2 text-foreground">
-                            Are you sure you want to permanently delete <strong className="text-destructive font-semibold">{tenant.name}</strong>?
+                            Are you sure you want to permanently delete <strong className="text-destructive font-semibold">{tenant.institute_name}</strong>?
                             <br /><br />
                             <span className="text-sm text-muted-foreground">
                                 This action cannot be undone. All associated records including administrator accounts, students, faculty, courses, enrollments, exams, and invoices will be permanently erased.
@@ -251,12 +251,13 @@ export default function Edit({ tenant, adminUser }: any) {
 Edit.layout = {
     breadcrumbs: [
         {
-            title: 'Schools',
+            title: 'Institutes',
             href: '/admin/tenants',
         },
         {
-            title: 'Edit School',
+            title: 'Edit Institute',
             href: '#',
         },
     ],
 };
+

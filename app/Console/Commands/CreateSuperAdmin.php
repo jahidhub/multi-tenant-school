@@ -46,6 +46,7 @@ class CreateSuperAdmin extends Command
                 'password' => Hash::make($password),
                 'role' => 'super-admin',
                 'tenant_id' => null,
+                'status' => 'active',
             ]
         );
 

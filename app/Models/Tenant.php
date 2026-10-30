@@ -9,7 +9,11 @@ class Tenant extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'institute_name', 'slug', 'owner_name', 'domain',
+        'status', 'plan', 'settings', 'address',
+        'logo_path', 'primary_color', 'tagline',
+    ];
 
     protected function casts(): array
     {

@@ -3,9 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="One Platform. Every School. Manage students, teachers, courses, attendance, exams, fees, and report cards.">
-        <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
-        <meta property="og:description" content="One Platform. Every School.">
+        @php
+            $siteName = app()->bound('tenant') ? app('tenant')->institute_name : config('app.name', 'Laravel');
+            $tagline = (app()->bound('tenant') && app('tenant')->tagline) ? app('tenant')->tagline : 'One Platform. Every School.';
+        @endphp
+        <meta name="description" content="{{ $tagline }}. Manage students, teachers, courses, attendance, exams, fees, and report cards.">
+        <meta property="og:title" content="{{ $siteName }}">
+        <meta property="og:description" content="{{ $tagline }}">
         <meta property="og:type" content="website">
         <meta property="og:image" content="/og-image.png">
         <meta name="twitter:card" content="summary_large_image">
@@ -15,10 +19,8 @@
         <script>
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
-
                 if (appearance === 'system') {
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
                     if (prefersDark) {
                         document.documentElement.classList.add('dark');
                     }
@@ -28,13 +30,11 @@
 
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
-            html {
-                background-color: oklch(1 0 0);
-            }
-
-            html.dark {
-                background-color: #0B1F3A;
-            }
+            html { background-color: oklch(1 0 0); }
+            html.dark { background-color: #0B1F3A; }
+            @if(app()->bound('tenant') && app('tenant')->primary_color)
+            :root { --primary: {{ app('tenant')->primary_color }}; --ring: {{ app('tenant')->primary_color }}; }
+            @endif
         </style>
 
         <link rel="icon" href="/favicon.ico?v=2" sizes="any">
@@ -46,7 +46,7 @@
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         <x-inertia::head>
-            <title>{{ config('app.name', 'Laravel') }}</title>
+            <title>{{ $siteName }}</title>
         </x-inertia::head>
     </head>
     <body class="font-sans antialiased">

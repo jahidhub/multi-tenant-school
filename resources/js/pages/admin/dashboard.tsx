@@ -12,7 +12,7 @@ interface StatsData {
     suspendedSchools: number;
 }
 
-interface SchoolData {
+interface InstituteData {
     id: number;
     name: string;
     slug: string | null;
@@ -30,7 +30,7 @@ interface ChartData {
 
 interface DashboardProps {
     stats: StatsData;
-    schoolsData: SchoolData[];
+    schoolsData: InstituteData[];
     registrationsChart: ChartData[];
 }
 
@@ -49,9 +49,9 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                         <div className="mt-2 flex items-center gap-3">
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                 <span className="h-2 w-2 rounded-full bg-green-600 dark:bg-green-400"></span>
-                                {stats.activeSchools} Active Schools
+                                {stats.activeSchools} Active Institutes
                             </span>
-                            {stats.suspendedSchools > 0 && (
+                            {stats.suspendedInstitutes > 0 && (
                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
                                     <span className="h-2 w-2 rounded-full bg-red-600 dark:bg-red-400"></span>
                                     {stats.suspendedSchools} Suspended
@@ -63,7 +63,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                     <Button asChild className="shrink-0 gap-2">
                         <Link href="/admin/tenants/create">
                             <Plus className="h-4 w-4" />
-                            Add School
+                            Add Institute
                         </Link>
                     </Button>
                 </div>
@@ -72,7 +72,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                 <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <span className="text-sm font-medium text-muted-foreground">Total Schools</span>
+                            <span className="text-sm font-medium text-muted-foreground">Total Institutes</span>
                             <Building2 className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                         </CardHeader>
                         <CardContent>
@@ -92,7 +92,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <span className="text-sm font-medium text-muted-foreground">Total School-Admins</span>
+                            <span className="text-sm font-medium text-muted-foreground">Total Institute-Admins</span>
                             <UserCircle className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                         </CardHeader>
                         <CardContent>
@@ -107,8 +107,8 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-1">
-                                    <h2 className="text-lg font-semibold tracking-tight">Growth: Schools Onboarded</h2>
-                                    <p className="text-sm text-muted-foreground">Number of new schools joining the platform over time.</p>
+                                    <h2 className="text-lg font-semibold tracking-tight">Growth: Institutes Onboarded</h2>
+                                    <p className="text-sm text-muted-foreground">Number of new Institutes joining the platform over time.</p>
                                 </div>
                             </div>
                         </CardHeader>
@@ -142,7 +142,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                             <div className="flex items-center justify-between">
                                 <div className="space-y-1">
                                     <h2 className="text-lg font-semibold tracking-tight">Platform Metadata</h2>
-                                    <p className="text-sm text-muted-foreground">Detailed overview of all registered schools on the platform.</p>
+                                    <p className="text-sm text-muted-foreground">Detailed overview of all registered Institutes on the platform.</p>
                                 </div>
                             </div>
                         </CardHeader>
@@ -151,7 +151,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                                 <table className="w-full text-sm text-left">
                                     <thead className="text-xs uppercase bg-muted/50 text-muted-foreground">
                                         <tr>
-                                            <th className="px-4 py-3 font-medium">School Name</th>
+                                            <th className="px-4 py-3 font-medium">Institute Name</th>
                                             <th className="px-4 py-3 font-medium">Slug</th>
                                             <th className="px-4 py-3 font-medium">Admin Email</th>
                                             <th className="px-4 py-3 font-medium text-center">Students / Cap</th>
@@ -164,7 +164,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                                         {schoolsData.length === 0 ? (
                                             <tr>
                                                 <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
-                                                    No schools found on the platform.
+                                                    No Institutes found on the platform.
                                                 </td>
                                             </tr>
                                         ) : (
@@ -173,7 +173,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                                                 
                                                 return (
                                                     <tr key={school.id} className="hover:bg-muted/50 transition-colors">
-                                                        <td className="px-4 py-3 font-medium">{school.name}</td>
+                                                        <td className="px-4 py-3 font-medium">{school.institute_name}</td>
                                                         <td className="px-4 py-3 text-muted-foreground">{school.slug || '-'}</td>
                                                         <td className="px-4 py-3">
                                                             {school.admin_email !== 'N/A' ? (
@@ -209,7 +209,7 @@ export default function AdminDashboard({ stats, schoolsData, registrationsChart 
                                                             <Button asChild size="sm" variant="outline" className="h-8 gap-1.5 text-xs font-medium border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 dark:border-blue-900 dark:text-blue-400 dark:hover:bg-blue-950/50">
                                                                 <Link href={`/admin/tenants/${school.id}/impersonate`} method="post" as="button">
                                                                     <ShieldAlert className="h-3 w-3" />
-                                                                    Login as School
+                                                                    Login as Institute
                                                                 </Link>
                                                             </Button>
                                                         </td>
@@ -236,3 +236,4 @@ AdminDashboard.layout = {
         },
     ],
 };
+

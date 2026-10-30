@@ -52,7 +52,8 @@ class TenantController extends Controller
 
         DB::transaction(function () use ($validated) {
             $tenant = Tenant::create([
-                'name' => $validated['name'],
+                'institute_name' => $validated['name'],
+                'owner_name' => $validated['admin_name'],
                 'slug' => $validated['slug'],
                 'domain' => $validated['domain'] ?? null,
                 'plan' => $validated['plan'],
@@ -103,7 +104,8 @@ class TenantController extends Controller
 
         DB::transaction(function () use ($validated, $tenant, $adminUser) {
             $tenant->fill([
-                'name' => $validated['name'],
+                'institute_name' => $validated['name'],
+                'owner_name' => $validated['admin_name'],
                 'slug' => $validated['slug'],
                 'domain' => $validated['domain'],
                 'status' => $validated['status'],
@@ -141,10 +143,10 @@ class TenantController extends Controller
             ]);
         }
 
-        $tenantName = $tenant->name;
+        $tenantName = $tenant->institute_name;
 
         DB::transaction(function () use ($tenant) {
-            activity()->causedBy(auth()->user())->log("Deleted school: {$tenant->name} (ID: {$tenant->id})");
+            activity()->causedBy(auth()->user())->log("Deleted school: {$tenant->institute_name} (ID: {$tenant->id})");
             $tenant->delete();
         });
 
@@ -170,7 +172,7 @@ class TenantController extends Controller
             \Illuminate\Support\Facades\Log::info("Impersonate START: Original ID = {$superAdminId}, Target Tenant ID = {$tenant->id}");
             
             // Log the impersonation activity
-            activity()->log('Impersonated school: ' . $tenant->name);
+            activity()->log('Impersonated school: ' . $tenant->institute_name);
             
             \Illuminate\Support\Facades\Auth::login($adminUser);
             

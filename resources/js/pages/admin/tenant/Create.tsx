@@ -33,20 +33,20 @@ export default function Create() {
 
     return (
         <>
-            <Head title="Create School" />
+            <Head title="Create Institute" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Onboard New School</CardTitle>
-                        <CardDescription>Enter the details to create a new school tenant and its initial administrator account.</CardDescription>
+                        <CardTitle>Onboard New Institute</CardTitle>
+                        <CardDescription>Enter the details to create a new Institute tenant and its initial administrator account.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={submit} className="space-y-6">
                             <div className="space-y-4">
-                                <h3 className="text-lg font-medium">School Details</h3>
+                                <h3 className="text-lg font-medium">Institute Details</h3>
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <div className="grid gap-2">
-                                        <Label htmlFor="name">School Name</Label>
+                                        <Label htmlFor="name">Institute Name</Label>
                                         <Input 
                                             id="name" 
                                             value={data.name} 
@@ -149,7 +149,7 @@ export default function Create() {
 
                             <div className="pt-2">
                                 <Button type="submit" disabled={processing}>
-                                    Create School & Admin
+                                    Create Institute & Admin
                                 </Button>
                             </div>
                         </form>
@@ -163,12 +163,13 @@ export default function Create() {
 Create.layout = {
     breadcrumbs: [
         {
-            title: 'Schools',
+            title: 'Institutes',
             href: '/admin/tenants',
         },
         {
-            title: 'Create School',
+            title: 'Create Institute',
             href: '/admin/tenants/create',
         },
     ],
 };
+

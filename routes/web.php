@@ -21,6 +21,8 @@ Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
+Route::inertia('/register/pending', 'auth/pending-approval')->name('register.pending');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     // Super-Admin routes
     Route::middleware([\App\Http\Middleware\SuperAdmin::class])->prefix('admin')->name('admin.')->group(function () {
@@ -32,6 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'update'])->name('tenants.update');
         Route::delete('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'destroy'])->name('tenants.destroy');
         Route::post('/tenants/{tenant}/impersonate', [\App\Http\Controllers\Admin\TenantController::class, 'impersonate'])->name('tenants.impersonate');
+        Route::get('/registrations', [\App\Http\Controllers\Admin\RegistrationController::class, 'index'])->name('registrations.index');
+        Route::post('/registrations/{user}/approve', [\App\Http\Controllers\Admin\RegistrationController::class, 'approve'])->name('registrations.approve');
+        Route::post('/registrations/{user}/reject', [\App\Http\Controllers\Admin\RegistrationController::class, 'reject'])->name('registrations.reject');
     });
 
     Route::post('/impersonation/leave', [\App\Http\Controllers\Admin\TenantController::class, 'leaveImpersonation'])->name('impersonation.leave');

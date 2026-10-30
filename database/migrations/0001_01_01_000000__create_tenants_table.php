@@ -6,26 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('slug')->unique()->nullable();
+
+            // Institute identity
+            $table->string('institute_name', 150);
+            $table->string('slug')->unique();          // derived from institute_name
+
+            // Owner / contact
+            $table->string('owner_name', 150)->nullable();
             $table->string('domain')->nullable();
-            $table->string('status')->default('active');
-            $table->string('plan')->default('basic');
+
+            // Plan & status
+            $table->string('status')->default('active');   // active | suspended
+            $table->string('plan')->default('basic');      // basic | premium | enterprise
+
+            // Flexible settings (JSON)
             $table->json('settings')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tenants');

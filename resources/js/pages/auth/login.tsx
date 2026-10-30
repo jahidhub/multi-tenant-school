@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -21,10 +21,11 @@ export default function Login({
     canResetPassword,
     canRegister,
 }: Props) {
+    const { tenant } = usePage<any>().props;
+
     return (
         <>
             <Head title="Log in" />
-
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
@@ -105,7 +106,10 @@ export default function Login({
     );
 }
 
-Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+Login.layout = (page: any) => {
+    const tenant = page.props?.tenant;
+    return {
+        title: tenant ? `Log in to ${tenant.institute_name}` : 'Log in to your account',
+        description: tenant?.tagline ?? 'Enter your email and password below to log in',
+    };
 };
